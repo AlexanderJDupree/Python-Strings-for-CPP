@@ -1,0 +1,2 @@
+ignore:
+  - "tests/third_party/catch.hpp"
