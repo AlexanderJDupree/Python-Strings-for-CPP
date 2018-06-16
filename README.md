@@ -70,3 +70,7 @@ See also the list of [contributors](https://github.com/AlexanderJDupree/Python-S
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://raw.githubusercontent.com/AlexanderJDupree/Python-Strings-for-CPP/master/LICENSE) file for details
+
+## Special Thanks
+
+This readme and the contributing guidelines are based off this great [template](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
