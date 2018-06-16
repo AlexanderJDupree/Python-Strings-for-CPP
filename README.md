@@ -1,5 +1,5 @@
 # Python Strings for C++
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c24f1655cc534243b8ab5bcd60c8302c)](https://www.codacy.com/app/AlexanderJDupree/LinkedListsCPP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AlexanderJDupree/LinkedListsCPP&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/88e014aae022466aa04a5e91018f83af)](https://www.codacy.com/app/AlexanderJDupree/Python-Strings-for-CPP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AlexanderJDupree/Python-Strings-for-CPP&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/AlexanderJDupree/Python-Strings-for-CPP.svg?branch=master)](https://travis-ci.org/AlexanderJDupree/Python-Strings-for-CPP)
 [![codecov](https://codecov.io/gh/AlexanderJDupree/Python-Strings-for-CPP/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderJDupree/Python-Strings-for-CPP)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AlexanderJDupree/Python-Strings-for-CPP/master/LICENSE)
