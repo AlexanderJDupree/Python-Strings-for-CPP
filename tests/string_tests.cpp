@@ -13,9 +13,14 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 
 #include <iostream>
 #include "catch.hpp"
+#include "string.hpp"
 
-TEST_CASE("HELLO WORLD!")
+TEST_CASE("Constructing Strings", "[String], [constructors]")
 {
-    std::cout << "Hello World!" << std::endl;
+    SECTION("Default Construction")
+    {
+        String str;
 
+        REQUIRE(str.length() == 0);
+    }
 }
