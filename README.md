@@ -16,7 +16,7 @@
 
 ## Introduction
 
-As someone who learned Python before C++, one of my biggest complaints was how C++ handled strings. In Python strings were so versatile and were accompanied with a plethora of useful methods. Not so much for std::string in C++. Even though std::string performs fine, and it isn't too hard to manipulate it to my needs, I wanted to undertake this project to create a more Pythonic string class for C++. 
+As someone who learned Python before C++, one of my biggest complaints was how C++ handled strings. In Python, strings were so versatile and was accompanied by a variety of useful methods. Not so much for std::string in C++. Even though std::string performs fine, and it isn't too hard to manipulate it to my needs, I wanted to undertake this project to create a more Pythonic string class for C++. 
 
 06.15.2018
 
