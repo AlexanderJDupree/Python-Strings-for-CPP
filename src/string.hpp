@@ -37,9 +37,9 @@ public:
     /* Constructors */
     String() : _data(nullptr), _length(0), _capacity(0) {}
 
-    String(const_pointer str);
+    explicit String(const_pointer str);
 
-    String(size_type n);
+    explicit String(size_type n);
 
     /* Capacity */
     size_type size();
@@ -56,8 +56,10 @@ public:
 
     /* Operator Overloads */
     friend inline bool operator==(const self_type& lhs, const_pointer rhs);
+    friend inline bool operator==(const_pointer lhs, const self_type& rhs);
     friend inline bool operator==(const self_type& lhs, const self_type& rhs);
     friend inline bool operator!=(const self_type& lhs, const_pointer rhs);
+    friend inline bool operator!=(const_pointer lhs, const self_type& rhs);
     friend inline bool operator!=(const self_type& lhs, const self_type& rhs);
 
 
@@ -164,6 +166,10 @@ bool operator==(const String& lhs, const char* rhs)
 {
     return lhs.compare_equal(rhs);
 }
+bool operator==(const char* lhs, const String& rhs)
+{
+    return (rhs == lhs);
+}
 bool operator==(const String& lhs, const String& rhs)
 {
     return lhs.compare_equal(rhs);
@@ -171,6 +177,10 @@ bool operator==(const String& lhs, const String& rhs)
 bool operator!=(const String& lhs, const char* rhs)
 {
     return !(lhs == rhs);
+}
+bool operator!=(const char* lhs, const String& rhs)
+{
+    return (rhs != lhs);
 }
 bool operator!=(const String& lhs, const String& rhs)
 {
