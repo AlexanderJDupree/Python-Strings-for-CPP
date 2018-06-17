@@ -28,7 +28,7 @@
                       "-I", "${workspaceFolder}/tests/third_party",
                       "-I", "${workspaceFolder}/src",
                       "${workspaceFolder}/tests/bin/tests_main.o", 
-                      "${workspaceFolder}/src/string.hpp", 
+                      "${workspaceFolder}/src/string.cpp", 
                       "${workspaceFolder}/tests/string_tests.cpp", 
                       "-o", "${workspaceFolder}/tests/debug/runTests", "-Wall",
                       ],
