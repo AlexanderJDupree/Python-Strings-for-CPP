@@ -16,7 +16,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #define STRING_H
 
 #include <cstring>
-#include <iostream>
+#include <cstddef>
 #include <type_traits>
 
 /* Helper Functions */
