@@ -14,13 +14,13 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #ifndef STRING_CPP
 #define STRING_CPP
 
-#include <stdexcept>
+#include <iostream>
 #include "string.hpp"
 
 /* Constructors */
 String::String(const_pointer str) : String(len(str) + 1)
 {
-    _length = copy(str, _capacity);
+    copy(str, _capacity);
     _data[_length] = '\0';
 }
 
@@ -42,6 +42,35 @@ String::size_type String::capacity()
     return _capacity;
 }
 
+void String::reserve(size_type n)
+{
+    if(_capacity > n) { return; }
+
+    resize(n - 1);
+}
+
+void String::resize(size_type n)
+{
+    _capacity = n + 1;
+    if(_data == nullptr)
+    {
+        _data = new char[_capacity];
+        return;
+    }
+
+    pointer temp = new char[_capacity];
+
+    this->_length = copy(*this, temp, _capacity - 1);
+
+    temp[_length] = '\0';
+
+    delete [] this->_data;
+
+    this->_data = temp;
+
+    return;
+}
+
 bool String::empty()
 {
     return !(_length);
@@ -58,31 +87,40 @@ String::size_type String::len(const_pointer str)
     return length;
 }
 
+String::size_type String::copy(const self_type& in_str, pointer out_str, size_type len, size_type pos)
+{
+    validate_pointer(out_str);
+    validate_pointer(in_str._data);
+
+    size_type i = 0;
+    for(; i < len && in_str._data[pos] != '\0'; ++i)
+    {
+        //TODO access data member through the [] function
+        out_str[i] = in_str._data[pos++];
+    }
+    return i;
+}
+
 String::size_type String::copy(const_pointer str, size_type len)
 {
-    // TODO resize if len is bigger than capacity
-    // TODO Validate pointer
-    size_type pos = 0;
-    for(; pos < len && str[pos] != '\0'; ++pos)
+    validate_pointer(str);
+    if (len > _capacity) { resize(len); }
+
+    size_type i = 0;
+    for(; i < len && str[i] != '\0'; ++i)
     {
-        _data[pos] = str[pos];
+        _data[i] = str[i];
     }
-    return pos;
+    _length = i;
+    return i;
 }
 
 bool String::compare_equal(const_pointer str) const
 {
-    // TODO package this into seperate function
-    try
-    {
-        validate_pointer(str);
-        validate_pointer(_data);
-    }
-    catch (const std::invalid_argument& err)
+    if(catch_null_exception(str) || catch_null_exception(_data))
     {
         return false;
     }
-
 
     size_type i = 0;
     for (; _data[i] != '\0' && str[i] != '\0' && _data[i] == str[i]; ++i);
@@ -131,11 +169,24 @@ bool operator!=(const String& lhs, const String& rhs)
 }
 
 /* Private */
-void String::validate_pointer(const_pointer str) const
+void String::validate_pointer(const_pointer str)
 {
     if(str) { return; }
 
     throw std::invalid_argument("char pointer points to null");
+}
+
+bool String::catch_null_exception(const_pointer str)
+{
+    try
+    {
+        validate_pointer(str);
+        return false;
+    }
+    catch(const std::invalid_argument& err)
+    {
+        return true;
+    }
 }
 
 #endif // STRING_CPP

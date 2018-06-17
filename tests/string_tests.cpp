@@ -22,6 +22,7 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
         String str;
 
         REQUIRE(str.length() == 0);
+        REQUIRE(str.capacity() == 0);
     }
     SECTION("Construction with a C-string")
     {
@@ -110,5 +111,131 @@ TEST_CASE("Relational Operators", "[String], [relational], [operators], [overloa
         const char* rhs = "Hello";
 
         REQUIRE(lhs != rhs);
+    }
+}
+
+TEST_CASE("Copy Functions", "[String], [operations], [copy]")
+{
+    SECTION("An empty string and a populated c-string")
+    {
+        String string;
+        const char* str = "Hello";
+
+        string.copy(str, String::len(str));
+
+        REQUIRE(string == str);
+        REQUIRE(string.length() == 5);
+        REQUIRE(string.capacity() == 6);
+    }
+    SECTION("An empty string and a nullptr")
+    {
+        String string;
+        
+        REQUIRE_THROWS_AS(string.copy(nullptr, 10), std::invalid_argument);
+    }
+    SECTION("Copy a substring into a c-string")
+    {
+        String string("Hello World");
+        String substring("World");
+        char* str = new char[6];
+
+        unsigned length = String::copy(string, str, 5, 6);
+        str[length] = '\0';
+
+        REQUIRE(str == substring);
+
+        delete [] str;
+    }
+    SECTION("Copy an uninitiazlied string into a c-string")
+    {
+        String string;
+        char* str;
+
+        REQUIRE_THROWS_AS(String::copy(string, str, 5, 5), std::invalid_argument);
+    }
+    SECTION("Copy a string into a nullptr")
+    {
+        String string("Budweiser");
+
+        REQUIRE_THROWS_AS(String::copy(string, nullptr, 5, 5), std::invalid_argument);
+    }
+}
+
+TEST_CASE("Resize function", "[String], [operations], [resize]")
+{
+    SECTION("An empty string")
+    {
+        String string;
+
+        string.resize(100);
+
+        REQUIRE(string.capacity() == 101);
+        REQUIRE(string.length() == 0);
+    }
+    SECTION("A populated string")
+    {
+        const char* test = "Hello World";
+        String string(test);
+
+        string.resize(1000);
+
+        REQUIRE(string.capacity() == 1001);
+        REQUIRE(string.length() == String::len(test));
+        REQUIRE(string == test);
+    }
+    SECTION("Resizing to smaller capacity")
+    {
+        const char* test = "Hello World";
+        String string(test);
+
+        string.resize(5);
+        
+        REQUIRE(string.capacity() == 6);
+        REQUIRE(string.length() == 5);
+        REQUIRE(string == "Hello");
+    }
+    SECTION("Resizing to smaller capacity from a reserved string")
+    {
+        String string(100);
+
+        string.resize(0);
+
+        REQUIRE(string.capacity() == 1);
+        REQUIRE(string.length() == 0);
+    }
+}
+
+TEST_CASE("Reserve function", "[String], [operations], [reserve]")
+{
+    SECTION("An empty string")
+    {
+        String string;
+
+        string.reserve(100);
+
+        REQUIRE(string.capacity() == 100);
+        REQUIRE(string.length() == 0);
+    }
+    SECTION("A populated string")
+    {
+        const char* test = "Hello World";
+        String string(test);
+
+        string.reserve(1000);
+
+        REQUIRE(string.capacity() == 1000);
+        REQUIRE(string.length() == String::len(test));
+        REQUIRE(string == test);
+    }
+    SECTION("Reserving to a smaller capacity does nothing")
+    {
+        const char* test = "Hello World";
+        String string(test);
+
+        string.reserve(0);
+
+        REQUIRE(string.capacity() == String::len(test) + 1);
+        REQUIRE(string.length() == String::len(test));
+        REQUIRE(string == test);
     }
 }
