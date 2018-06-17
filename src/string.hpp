@@ -17,6 +17,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 
 #include <cstring>
 #include <cstddef>
+#include <stdexcept>
 #include <type_traits>
 
 /* Helper Functions */
@@ -45,12 +46,15 @@ public:
     size_type size();
     size_type length();
     size_type capacity();
-    
+
+    void reserve(size_type n);
+    void resize(size_type n);
     bool empty();
 
     /* Operations */
-    size_type len(const_pointer str);
-    size_type copy(const_pointer str, size_type len);
+    static size_type len(const_pointer str);
+    static size_type copy(const self_type& in_str, pointer out_str, size_type len, size_type pos=0);
+    size_type copy(const_pointer str, size_type len); // TODO add positional argument
     bool compare_equal(const_pointer str) const;
     bool compare_equal(const self_type& str) const;
 
@@ -70,7 +74,8 @@ private:
     size_type _length;
     size_type _capacity;
 
-    void validate_pointer(const_pointer) const;
+    static void validate_pointer(const_pointer);
+    static bool catch_null_exception(const_pointer);
 
 };
 
