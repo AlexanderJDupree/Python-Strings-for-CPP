@@ -14,6 +14,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #ifndef STRING_CPP
 #define STRING_CPP
 
+#include <stdexcept>
 #include "string.hpp"
 
 /* Constructors */
