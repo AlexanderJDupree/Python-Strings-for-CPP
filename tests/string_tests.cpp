@@ -12,6 +12,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 */
 
 #include <stdexcept>
+#include <iostream>
 #include "catch.hpp"
 #include "string.hpp"
 
@@ -237,5 +238,45 @@ TEST_CASE("Reserve function", "[String], [operations], [reserve]")
         REQUIRE(string.capacity() == String::len(test) + 1);
         REQUIRE(string.length() == String::len(test));
         REQUIRE(string == test);
+    }
+}
+
+TEST_CASE("Element access with [] operator", "[String], [operator]")
+{
+    SECTION("A populated String")
+    {
+        const char* test = "Hello!";
+        String string(test);
+
+        for (unsigned i = 0; i < string.length(); ++i)
+        {
+            REQUIRE(string[i] == test[i]);
+        }
+    }
+    SECTION("Accessing out of bounds element")
+    {
+        String string("Hello");
+
+        REQUIRE_THROWS_AS(string[10], std::out_of_range);
+    }
+    SECTION("Accessing elements with reverse index")
+    {
+        const char* test = "!olleH";
+        const char* reverse = "Hello!";
+
+        String string(test);
+
+        unsigned int n = 0;
+        for (int i = -1; i >= static_cast<int>(string.length() * -1); --i)
+        {
+            REQUIRE(string[i] == reverse[n]);
+            ++n;
+        }
+    }
+    SECTION("Accessing out of bounds element with reverse index")
+    {
+        String string("Hello!");
+
+        REQUIRE_THROWS_AS(string[-100], std::out_of_range);
     }
 }

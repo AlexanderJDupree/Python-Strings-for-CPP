@@ -168,12 +168,35 @@ bool operator!=(const String& lhs, const String& rhs)
     return !(lhs == rhs);
 }
 
+String::reference String::operator[](index_type pos)
+{
+    validate_position(pos);
+
+    return _data[pos];
+} 
+
+String::const_reference String::operator[](index_type pos) const
+{
+    validate_position(pos);
+
+    return _data[pos];
+}
+
 /* Private */
 void String::validate_pointer(const_pointer str)
 {
     if(str) { return; }
 
     throw std::invalid_argument("char pointer points to null");
+}
+
+void String::validate_position(index_type& pos) const
+{
+    if (pos < 0) { pos += _length; }
+    if(pos < static_cast<index_type>(_length) && pos >= 0) { return; }
+
+    // TODO return value of pos in error statement
+    throw std::out_of_range("error, index pos is out of bounds");
 }
 
 bool String::catch_null_exception(const_pointer str)

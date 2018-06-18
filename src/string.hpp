@@ -34,6 +34,7 @@ public:
     typedef const char* const_pointer;
     typedef ptrdiff_t   difference_type;
     typedef size_t      size_type;
+    typedef int         index_type;
 
     /* Constructors */
     String() : _data(nullptr), _length(0), _capacity(0) {}
@@ -66,6 +67,8 @@ public:
     friend bool operator!=(const_pointer lhs, const self_type& rhs);
     friend bool operator!=(const self_type& lhs, const self_type& rhs);
 
+    reference operator[](index_type pos);
+    const_reference operator[](index_type pos) const;
 
 private:
 
@@ -75,8 +78,8 @@ private:
     size_type _capacity;
 
     static void validate_pointer(const_pointer);
+    void validate_position(index_type& pos) const;
     static bool catch_null_exception(const_pointer);
-
 };
 
 #endif // STRING_H
