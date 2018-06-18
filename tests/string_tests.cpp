@@ -13,6 +13,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 #include "catch.hpp"
 #include "string.hpp"
 
@@ -288,5 +289,19 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
         {
             REQUIRE(string[i] == test[i]);
         }
+    }
+}
+
+TEST_CASE("Stream operator overlaods")
+{
+    SECTION("<< operator")
+    {
+        std::stringstream ss;
+        const char* test = "Hello!\t";
+        String string(test);
+
+        ss << string;
+
+        REQUIRE(ss.str() == test);
     }
 }
