@@ -44,13 +44,13 @@ public:
     explicit String(size_type n);
 
     /* Capacity */
-    size_type size();
-    size_type length();
-    size_type capacity();
+    size_type size() const;
+    size_type length() const;
+    size_type capacity() const;
 
     void reserve(size_type n);
     void resize(size_type n);
-    bool empty();
+    bool empty() const;
 
     /* Operations */
     static size_type len(const_pointer str);

@@ -279,4 +279,14 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
 
         REQUIRE_THROWS_AS(string[-100], std::out_of_range);
     }
+    SECTION("Accessing elements in a const string")
+    {
+        const char* test = "Hello!";
+        const String string(test);
+
+        for (unsigned i = 0; i < string.length(); ++i)
+        {
+            REQUIRE(string[i] == test[i]);
+        }
+    }
 }

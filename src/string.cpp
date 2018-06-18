@@ -27,17 +27,17 @@ String::String(const_pointer str) : String(len(str) + 1)
 String::String(size_type n) : _data(new char[n]), _length(0), _capacity(n) {}
 
 /* Capacity */
-String::size_type String::size()
+String::size_type String::size() const
 {
     return _length;
 }
 
-String::size_type String::length()
+String::size_type String::length() const
 {
     return _length;
 }
 
-String::size_type String::capacity()
+String::size_type String::capacity() const
 {
     return _capacity;
 }
@@ -71,7 +71,7 @@ void String::resize(size_type n)
     return;
 }
 
-bool String::empty()
+bool String::empty() const
 {
     return !(_length);
 }
