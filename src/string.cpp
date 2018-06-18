@@ -27,17 +27,17 @@ String::String(const_pointer str) : String(len(str) + 1)
 String::String(size_type n) : _data(new char[n]), _length(0), _capacity(n) {}
 
 /* Capacity */
-String::size_type String::size()
+String::size_type String::size() const
 {
     return _length;
 }
 
-String::size_type String::length()
+String::size_type String::length() const
 {
     return _length;
 }
 
-String::size_type String::capacity()
+String::size_type String::capacity() const
 {
     return _capacity;
 }
@@ -71,7 +71,7 @@ void String::resize(size_type n)
     return;
 }
 
-bool String::empty()
+bool String::empty() const
 {
     return !(_length);
 }
@@ -168,12 +168,35 @@ bool operator!=(const String& lhs, const String& rhs)
     return !(lhs == rhs);
 }
 
+String::reference String::operator[](index_type pos)
+{
+    validate_position(pos);
+
+    return _data[pos];
+} 
+
+String::const_reference String::operator[](index_type pos) const
+{
+    validate_position(pos);
+
+    return _data[pos];
+}
+
 /* Private */
 void String::validate_pointer(const_pointer str)
 {
     if(str) { return; }
 
     throw std::invalid_argument("char pointer points to null");
+}
+
+void String::validate_position(index_type& pos) const
+{
+    if (pos < 0) { pos += _length; }
+    if(pos < static_cast<index_type>(_length) && pos >= 0) { return; }
+
+    // TODO return value of pos in error statement
+    throw std::out_of_range("error, index pos is out of bounds");
 }
 
 bool String::catch_null_exception(const_pointer str)
