@@ -168,6 +168,13 @@ bool operator!=(const String& lhs, const String& rhs)
     return !(lhs == rhs);
 }
 
+std::ostream& operator<<(std::ostream& os, const String& str)
+{
+    os << str._data;
+    return os;
+}
+
+
 String::reference String::operator[](index_type pos)
 {
     validate_position(pos);

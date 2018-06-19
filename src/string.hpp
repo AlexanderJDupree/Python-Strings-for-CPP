@@ -17,10 +17,10 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 
 #include <cstring>
 #include <cstddef>
+#include <iostream>
 #include <stdexcept>
 #include <type_traits>
 
-/* Helper Functions */
 
 class String 
 {
@@ -66,6 +66,7 @@ public:
     friend bool operator!=(const self_type& lhs, const_pointer rhs);
     friend bool operator!=(const_pointer lhs, const self_type& rhs);
     friend bool operator!=(const self_type& lhs, const self_type& rhs);
+    friend std::ostream& operator<<(std::ostream& os, const self_type& str);
 
     reference operator[](index_type pos);
     const_reference operator[](index_type pos) const;
