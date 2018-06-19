@@ -83,4 +83,26 @@ private:
     static bool catch_null_exception(const_pointer);
 };
 
+struct out_of_range : public std::exception
+{
+    const char* error;
+
+    int pos;
+
+    out_of_range() : error("out of range"), pos(0) {}
+
+    out_of_range(const char* err, int pos) 
+        : error(err), pos(pos) {}
+
+    const char* what() const throw()
+    {
+        return error;
+    }
+
+    int index() const throw()
+    {
+        return pos;
+    }
+};
+
 #endif // STRING_H
