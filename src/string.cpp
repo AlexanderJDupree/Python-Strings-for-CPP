@@ -174,7 +174,6 @@ std::ostream& operator<<(std::ostream& os, const String& str)
     return os;
 }
 
-
 String::reference String::operator[](index_type pos)
 {
     validate_position(pos);
@@ -202,8 +201,7 @@ void String::validate_position(index_type& pos) const
     if (pos < 0) { pos += _length; }
     if(pos < static_cast<index_type>(_length) && pos >= 0) { return; }
 
-    // TODO return value of pos in error statement
-    throw std::out_of_range("error, index pos is out of bounds");
+    throw out_of_range("error, index pos is out of bounds", pos);
 }
 
 bool String::catch_null_exception(const_pointer str)

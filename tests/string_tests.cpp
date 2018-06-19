@@ -258,7 +258,7 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
     {
         String string("Hello");
 
-        REQUIRE_THROWS_AS(string[10], std::out_of_range);
+        REQUIRE_THROWS_AS(string[10], out_of_range);
     }
     SECTION("Accessing elements with reverse index")
     {
@@ -278,7 +278,7 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
     {
         String string("Hello!");
 
-        REQUIRE_THROWS_AS(string[-100], std::out_of_range);
+        REQUIRE_THROWS_AS(string[-100], out_of_range);
     }
     SECTION("Accessing elements in a const string")
     {
@@ -292,7 +292,7 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
     }
 }
 
-TEST_CASE("Stream operator overlaods")
+TEST_CASE("Stream operator overlaods", "[String], [operators]")
 {
     SECTION("<< operator")
     {
@@ -303,5 +303,22 @@ TEST_CASE("Stream operator overlaods")
         ss << string;
 
         REQUIRE(ss.str() == test);
+    }
+}
+
+TEST_CASE("Custom exceptions", "[String], [exceptions]")
+{
+    SECTION("Out of range exception")
+    {
+        String string("Y'all");
+
+        try
+        {
+            string[1000];
+        } 
+        catch (const out_of_range& err)
+        {
+            REQUIRE(err.index() == 1000);
+        }
     }
 }
