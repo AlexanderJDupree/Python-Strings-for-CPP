@@ -89,7 +89,7 @@ struct out_of_range : public std::exception
 
     int pos;
 
-    out_of_range() : error("out of range") {}
+    out_of_range() : error("out of range"), pos(0) {}
 
     out_of_range(const char* err, int pos) 
         : error(err), pos(pos) {}
@@ -99,7 +99,7 @@ struct out_of_range : public std::exception
         return error;
     }
 
-    const int index() const throw()
+    int index() const throw()
     {
         return pos;
     }
