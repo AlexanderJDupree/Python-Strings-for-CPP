@@ -311,6 +311,7 @@ TEST_CASE("Custom exceptions", "[String], [exceptions]")
     SECTION("Out of range exception")
     {
         String string("Y'all");
+        String message("error, index pos is out of bounds");
 
         try
         {
@@ -318,6 +319,7 @@ TEST_CASE("Custom exceptions", "[String], [exceptions]")
         } 
         catch (const out_of_range& err)
         {
+            REQUIRE(err.what() == message);
             REQUIRE(err.index() == 1000);
         }
     }
