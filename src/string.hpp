@@ -79,6 +79,7 @@ public:
     
     bool isupper();
     bool islower();
+    bool isnumeric();
 
     /* Operator Overloads */
     friend bool operator==(const self_type& lhs, const_pointer rhs);

@@ -461,6 +461,22 @@ TEST_CASE("islower() to determine string state", "[String], [bool], [python]")
     }
 }
 
+TEST_CASE("isnumeric() to determine string state", "[String], [python], [isnumeric]")
+{
+    SECTION("A numeric string")
+    {
+        String string("12345");
+
+        REQUIRE(string.isnumeric());
+    }
+    SECTION("A non-numeric string")
+    {
+        String string("1234f");
+
+        REQUIRE(!string.isnumeric());
+    }
+}
+
 TEST_CASE("upper() to change casing of string", "[String], [python], [upper]")
 {
     SECTION("A lower cased string")
@@ -490,5 +506,11 @@ TEST_CASE("lower() to change casing of string", "[String], [python], [lower]")
         String string("hE!!O");
         
         REQUIRE(string.lower().islower());
+    }
+    SECTION("An empty string")
+    {
+        String string;
+
+        REQUIRE(!(string.lower().islower()));
     }
 }
