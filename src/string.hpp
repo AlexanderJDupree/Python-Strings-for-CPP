@@ -37,7 +37,7 @@ public:
     typedef int         index_type;
 
     /* Constructors */
-    String() : _data(nullptr), _length(0), _capacity(0) {}
+    String() : _data(nullptr), _length(0), _capacity(1) {}
 
     explicit String(const_pointer str);
 
@@ -58,6 +58,9 @@ public:
     size_type copy(const_pointer str, size_type len); // TODO add positional argument
     bool compare_equal(const_pointer str) const;
     bool compare_equal(const self_type& str) const;
+
+    /* Modifiers */
+    void push_back (const_reference character);
 
     /* Operator Overloads */
     friend bool operator==(const self_type& lhs, const_pointer rhs);

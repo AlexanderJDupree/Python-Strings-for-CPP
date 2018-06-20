@@ -24,7 +24,7 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
         String str;
 
         REQUIRE(str.length() == 0);
-        REQUIRE(str.capacity() == 0);
+        REQUIRE(str.capacity() == 1);
     }
     SECTION("Construction with a C-string")
     {
@@ -60,7 +60,7 @@ TEST_CASE("Capacity functions", "[String], [capacity]")
     {
         String str;
 
-        REQUIRE(str.capacity() == 0);
+        REQUIRE(str.capacity() == 1);
     }
     SECTION("Test if string is empty")
     {
@@ -310,7 +310,7 @@ TEST_CASE("Custom exceptions", "[String], [exceptions]")
 {
     SECTION("Out of range exception")
     {
-        String string("Y'all");
+        String string("Test");
         String message("error, index pos is out of bounds");
 
         try
@@ -322,5 +322,34 @@ TEST_CASE("Custom exceptions", "[String], [exceptions]")
             REQUIRE(err.what() == message);
             REQUIRE(err.index() == 1000);
         }
+    }
+}
+
+TEST_CASE("Push_back modifier", "[String], [modifiers], [push_back]")
+{
+    SECTION("A populated list")
+    {
+        String string("Hell");
+
+        string.push_back('o');
+        string.push_back('!');
+
+        REQUIRE(string == "Hello!");
+        REQUIRE(string.capacity() == 11);
+        REQUIRE(string.length() == 6);
+    }
+    SECTION("An empty list")
+    {
+        String string;
+
+        string.push_back('O');
+        string.push_back('K');
+        string.push_back('!');
+        string.push_back('!');
+
+
+        REQUIRE(string == "OK!!");
+        REQUIRE(string.capacity() == 7);
+        REQUIRE(string.length() == 4);
     }
 }

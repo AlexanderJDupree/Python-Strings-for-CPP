@@ -95,7 +95,6 @@ String::size_type String::copy(const self_type& in_str, pointer out_str, size_ty
     size_type i = 0;
     for(; i < len && in_str._data[pos] != '\0'; ++i)
     {
-        //TODO access data member through the [] function
         out_str[i] = in_str._data[pos++];
     }
     return i;
@@ -140,6 +139,17 @@ bool String::compare_equal(const self_type& str) const
     }
 
     return compare_equal(str._data);
+}
+
+/* Modifiers */
+void String::push_back(const_reference character)
+{
+    if(_length >= _capacity - 1) { resize(_capacity * 2); }
+
+    _data[_length++] = character;
+    _data[_length] = '\0';
+
+    return;
 }
 
 /* Operator Overloads */
