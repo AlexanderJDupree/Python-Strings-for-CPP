@@ -353,3 +353,47 @@ TEST_CASE("Push_back modifier", "[String], [modifiers], [push_back]")
         REQUIRE(string.length() == 4);
     }
 }
+
+TEST_CASE("Iterators for element access and string traversal", "[String], [iterators]")
+{
+    SECTION("A populated list")
+    {
+        const char* test = "Hello!";
+        String string(test);
+
+        unsigned i = 0;
+        for(String::iterator it = string.begin(); it != string.end(); ++it)
+        {
+            REQUIRE(*it == test[i++]);
+        }
+    }
+    SECTION("end() returns a null terminating character")
+    {
+        String string("Hi");
+
+        REQUIRE(*string.end() == '\0');
+    }
+    SECTION("Ranged based for loop")
+    {
+        const char* test = "Hello!";
+        String string(test);
+
+        unsigned i = 0;
+        for (char& letter : string)
+        {
+            REQUIRE(letter == test[i++]);
+        }
+    }
+    SECTION("Ranged based for loop on const string")
+    {
+        const char* test = "Hello!";
+        const String string(test);
+
+        unsigned i = 0;
+        for (const char& letter : string)
+        {
+            REQUIRE(letter == test[i++]);
+        }
+    }
+    
+}
