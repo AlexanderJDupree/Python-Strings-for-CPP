@@ -21,8 +21,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #include <stdexcept>
 #include <type_traits>
 
-
-class String 
+class String
 {
 public:
 
@@ -35,6 +34,8 @@ public:
     typedef ptrdiff_t   difference_type;
     typedef size_t      size_type;
     typedef int         index_type;
+    typedef char*       iterator;
+    typedef const char* const_iterator;
 
     /* Constructors */
     String() : _data(nullptr), _length(0), _capacity(1) {}
@@ -42,6 +43,15 @@ public:
     explicit String(const_pointer str);
 
     explicit String(size_type n);
+
+    /* Iterators */
+    const_iterator cbegin() const noexcept;
+    const_iterator begin() const;
+    iterator begin();
+
+    const_iterator cend() const noexcept;
+    const_iterator end() const;
+    iterator end();
 
     /* Capacity */
     size_type size() const;
@@ -61,6 +71,13 @@ public:
 
     /* Modifiers */
     void push_back (const_reference character);
+
+    /* Pythonic Modifiers */
+    self_type& lower();
+    self_type& upper();
+    
+    bool isupper();
+    bool islower();
 
     /* Operator Overloads */
     friend bool operator==(const self_type& lhs, const_pointer rhs);

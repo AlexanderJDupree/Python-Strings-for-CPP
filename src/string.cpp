@@ -26,6 +26,37 @@ String::String(const_pointer str) : String(len(str) + 1)
 
 String::String(size_type n) : _data(new char[n]), _length(0), _capacity(n) {}
 
+/* Iterators */
+String::const_iterator String::cbegin() const noexcept
+{
+    return &_data[0];
+}
+
+String::const_iterator String::begin() const
+{
+    return &_data[0];
+}
+
+String::iterator String::begin()
+{
+    return &_data[0];
+}
+
+String::const_iterator String::cend() const noexcept
+{
+    return &_data[_length];
+}
+
+String::const_iterator String::end() const
+{
+    return &_data[_length];
+}
+
+String::iterator String::end()
+{
+    return &_data[_length];
+}
+
 /* Capacity */
 String::size_type String::size() const
 {
@@ -151,6 +182,8 @@ void String::push_back(const_reference character)
 
     return;
 }
+
+/* Pythonic Modifiers */
 
 /* Operator Overloads */
 bool operator==(const String& lhs, const char* rhs)
