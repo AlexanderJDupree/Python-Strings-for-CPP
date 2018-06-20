@@ -356,7 +356,7 @@ TEST_CASE("Push_back modifier", "[String], [modifiers], [push_back]")
 
 TEST_CASE("Iterators for element access and string traversal", "[String], [iterators]")
 {
-    SECTION("A populated list")
+    SECTION("A populated string")
     {
         const char* test = "Hello!";
         String string(test);
@@ -395,5 +395,15 @@ TEST_CASE("Iterators for element access and string traversal", "[String], [itera
             REQUIRE(letter == test[i++]);
         }
     }
-    
+    SECTION("A const qualified populated string")
+    {
+        const char* test = "Hello!";
+        const String string(test);
+
+        unsigned i = 0;
+        for(String::const_iterator it = string.cbegin(); it != string.cend(); ++it)
+        {
+            REQUIRE(*it == test[i++]);
+        }
+    }
 }
