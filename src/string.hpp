@@ -15,6 +15,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #ifndef STRING_H
 #define STRING_H
 
+#include <cctype>
 #include <cstring>
 #include <cstddef>
 #include <iostream>
@@ -73,8 +74,8 @@ public:
     void push_back (const_reference character);
 
     /* Pythonic Modifiers */
-    self_type& lower();
     self_type& upper();
+    self_type& lower();
     
     bool isupper();
     bool islower();
