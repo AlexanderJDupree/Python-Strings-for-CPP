@@ -236,6 +236,19 @@ bool String::islower()
     }
     return result;
 }
+bool String::isnumeric()
+{
+    bool result = false;
+    for(const_iterator it = cbegin(); it != cend(); ++it)
+    {
+        if(!std::isdigit(*it)) 
+        {
+            return false;
+        }
+        result = true;
+    }
+    return result;
+}
 
 /* Operator Overloads */
 bool operator==(const String& lhs, const char* rhs)
