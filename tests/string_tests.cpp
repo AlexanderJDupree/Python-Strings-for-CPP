@@ -407,3 +407,88 @@ TEST_CASE("Iterators for element access and string traversal", "[String], [itera
         }
     }
 }
+
+TEST_CASE("isupper() to determine string state", "[String], [bool], [python]")
+{
+    SECTION("A uppercased string")
+    {
+        String string("HELLO");
+
+        REQUIRE(string.isupper());
+    }
+    SECTION("A lowercased string")
+    {
+        String string("hello");
+
+        REQUIRE(!(string.isupper()));
+    }
+    SECTION("A mixed case string")
+    {
+        String string("HELlO");
+        REQUIRE(!(string.isupper()));
+    }
+    SECTION("A string with symbols and one uppercased character")
+    {
+        String string("!@#$%^T");
+
+        REQUIRE(string.isupper());
+    }
+}
+TEST_CASE("islower() to determine string state", "[String], [bool], [python]")
+{
+    SECTION("A uppercased string")
+    {
+        String string("HELLO");
+
+        REQUIRE(!string.islower());
+    }
+    SECTION("A lowercased string")
+    {
+        String string("hello");
+
+        REQUIRE(string.islower());
+    }
+    SECTION("A mixed case string")
+    {
+        String string("helLo");
+        REQUIRE(!(string.islower()));
+    }
+    SECTION("A string with symbols and one lowercased character")
+    {
+        String string("!@#$%^t");
+
+        REQUIRE(string.islower());
+    }
+}
+
+TEST_CASE("upper() to change casing of string", "[String], [python], [upper]")
+{
+    SECTION("A lower cased string")
+    {
+        String string("hello");
+
+        REQUIRE(string.upper().isupper());
+    }
+    SECTION("A mixed cased string")
+    {
+        String string("hE!!o");
+
+        REQUIRE(string.upper().isupper());
+    }
+}
+
+TEST_CASE("lower() to change casing of string", "[String], [python], [lower]")
+{
+    SECTION("A upper cased string")
+    {
+        String string("HELLO");
+
+        REQUIRE(string.lower().islower());
+    }
+    SECTION("A mixed cased string")
+    {
+        String string("hE!!O");
+        
+        REQUIRE(string.lower().islower());
+    }
+}

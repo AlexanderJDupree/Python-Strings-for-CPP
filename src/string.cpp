@@ -185,6 +185,58 @@ void String::push_back(const_reference character)
 
 /* Pythonic Modifiers */
 
+String::self_type& String::upper()
+{
+    for(iterator it = begin(); it != end(); ++it)
+    {
+        *it = std::toupper(*it);
+    }
+    return *this;
+}
+
+String::self_type& String::lower()
+{
+    for(iterator it = begin(); it != end(); ++it)
+    {
+        *it = std::tolower(*it);
+    }
+    return *this;
+}
+
+bool String::isupper()
+{
+    bool result = false;
+    for(const_iterator it = cbegin(); it != cend(); ++it)
+    {
+        if (std::isalpha(*it))
+        {
+            if(std::islower(*it))
+            {
+                return false;
+            }
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool String::islower()
+{
+    bool result = false;
+    for(const_iterator it = cbegin(); it != cend(); ++it)
+    {
+        if(std::isalpha(*it))
+        {
+            if(std::isupper(*it))
+            {
+                return false;
+            }
+            result = true;
+        }
+    }
+    return result;
+}
+
 /* Operator Overloads */
 bool operator==(const String& lhs, const char* rhs)
 {
