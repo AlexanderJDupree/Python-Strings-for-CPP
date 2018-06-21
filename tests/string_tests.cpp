@@ -528,3 +528,25 @@ TEST_CASE("lower() to change casing of string", "[String], [python], [lower]")
         REQUIRE(!(string.lower().islower()));
     }
 }
+
+TEST_CASE("swapcase() to change casing of a string", "[String], [python], [swapcase]")
+{
+    SECTION("An uppercased string")
+    {
+        String string("HELLO");
+
+        REQUIRE(string.swapcase().islower());
+    }
+    SECTION("A lower cased string")
+    {
+        String string("hello");
+
+        REQUIRE(string.swapcase().isupper());
+    }
+    SECTION("A mixed cased string")
+    {
+        String string("He!Lo");
+
+        REQUIRE(string.swapcase() == "hE!lO");
+    } 
+}
