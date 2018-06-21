@@ -46,6 +46,20 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
     {
         REQUIRE_THROWS_AS(String(nullptr), std::invalid_argument);
     }
+    SECTION("Copy construction")
+    {
+        String origin("Hello");
+        String copy(origin);
+
+        REQUIRE(copy == origin);
+    }
+    SECTION("Copy construction with empty string")
+    {
+        String origin;
+        String copy(origin);
+
+        REQUIRE(copy == origin);
+    }
 }
 
 TEST_CASE("Capacity functions", "[String], [capacity]")

@@ -26,6 +26,19 @@ String::String(const_pointer str) : String(len(str) + 1)
 
 String::String(size_type n) : _data(new char[n]), _length(0), _capacity(n) {}
 
+String::String(const self_type& origin) : String()
+{
+    if(origin.empty()) { return; }
+
+    copy(origin._data, len(origin._data));
+    _data[_length] = '\0';
+}
+
+String::~String()
+{
+    delete [] _data;
+}
+
 /* Iterators */
 String::const_iterator String::cbegin() const noexcept
 {

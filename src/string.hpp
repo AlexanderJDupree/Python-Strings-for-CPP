@@ -41,9 +41,17 @@ public:
     /* Constructors */
     String() : _data(nullptr), _length(0), _capacity(1) {}
 
+    // C-string 
     explicit String(const_pointer str);
 
+    // Reserve
     explicit String(size_type n);
+
+    // Copy
+    String(const self_type& origin);
+
+    // Destructor
+    ~String();
 
     /* Iterators */
     const_iterator cbegin() const noexcept;
