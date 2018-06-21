@@ -216,6 +216,15 @@ String::self_type& String::lower()
     return *this;
 }
 
+String::self_type& String::swapcase()
+{
+    for(iterator it = begin(); it != end(); ++it)
+    {
+        std::isupper(*it) ? *it = std::tolower(*it) : *it = std::toupper(*it);
+    }
+    return *this;
+}
+
 bool String::isupper()
 {
     bool result = false;

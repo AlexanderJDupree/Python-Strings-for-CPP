@@ -84,6 +84,7 @@ public:
     /* Pythonic Modifiers */
     self_type& upper();
     self_type& lower();
+    self_type& swapcase();
     
     bool isupper();
     bool islower();
