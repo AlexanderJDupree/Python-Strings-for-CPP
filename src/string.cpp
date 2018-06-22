@@ -26,6 +26,14 @@ String::String(const_pointer str) : String(len(str) + 1)
 
 String::String(size_type n) : _data(new char[n]), _length(0), _capacity(n) {}
 
+String::String(size_type n, char c) : String(n + 1)
+{
+    while(n-- > 0)
+    {
+        push_back(c);
+    }
+}
+
 String::String(const self_type& origin) : String()
 {
     if(origin.empty()) { return; }
@@ -186,14 +194,48 @@ bool String::compare_equal(const self_type& str) const
 }
 
 /* Modifiers */
-void String::push_back(const_reference character)
+String::self_type& String::push_back(const_reference character)
 {
     if(_length >= _capacity - 1) { resize(_capacity * 2); }
 
     _data[_length++] = character;
     _data[_length] = '\0';
 
-    return;
+    return *this;
+}
+
+String::self_type& String::append(const self_type& str)
+{
+    reserve(_capacity + str._capacity);
+    return append(str._data);
+}
+
+String::self_type& String::append(const_pointer str)
+{
+    if (catch_null_exception(str)) { return *this; }
+
+    for (size_type index = 0; str[index] != '\0'; ++index)
+    {
+        push_back(str[index]);
+    }
+    _data[_length] = '\0';
+
+    return *this;
+}
+
+String::self_type& String::append(size_type n, char c)
+{
+    return append(String(n, c));
+}
+
+template <class InputIterator>
+String& String::append(InputIterator first, InputIterator last)
+{
+    for (; first != last; ++first)
+    {
+        push_back(*first);
+    }
+    return *this;
 }
 
 /* Pythonic Modifiers */

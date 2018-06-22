@@ -47,6 +47,9 @@ public:
     // Reserve
     explicit String(size_type n);
 
+    // Fill
+    String(size_type n, char c);
+
     // Copy
     String(const self_type& origin);
 
@@ -79,7 +82,14 @@ public:
     bool compare_equal(const self_type& str) const;
 
     /* Modifiers */
-    void push_back (const_reference character);
+    self_type& push_back(const_reference character);
+    self_type& append(const self_type& str);
+    self_type& append(const_pointer str);
+    self_type& append(size_type n, char c);
+
+    template <class InputIterator>
+    self_type& append(InputIterator first, InputIterator last);
+
 
     /* Pythonic Modifiers */
     self_type& upper();
