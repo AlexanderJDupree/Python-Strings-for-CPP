@@ -21,6 +21,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #include <iostream>
 #include <stdexcept>
 #include <type_traits>
+#include <initializer_list>
 
 class String
 {
@@ -46,6 +47,9 @@ public:
 
     // Reserve
     explicit String(size_type n);
+
+    // Fill
+    String(size_type n, char c);
 
     // Copy
     String(const self_type& origin);
@@ -79,7 +83,16 @@ public:
     bool compare_equal(const self_type& str) const;
 
     /* Modifiers */
-    void push_back (const_reference character);
+    self_type& push_back(const_reference character);
+    self_type& append(const self_type& str);
+    self_type& append(const_pointer str);
+    self_type& append(const_pointer str, size_type n);
+    self_type& append(size_type n, char c);
+    self_type& append(std::initializer_list<char> list);
+
+    template <class InputIterator>
+    self_type& append(InputIterator first, InputIterator last);
+
 
     /* Pythonic Modifiers */
     self_type& upper();
@@ -135,5 +148,17 @@ struct out_of_range : public std::exception
         return pos;
     }
 };
+
+
+// TODO move this out into the source file.
+template <class InputIterator>
+String& String::append(InputIterator first, InputIterator last)
+{
+    for (; first != last; ++first)
+    {
+        push_back(*first);
+    }
+    return *this;
+}
 
 #endif // STRING_H

@@ -26,6 +26,14 @@ String::String(const_pointer str) : String(len(str) + 1)
 
 String::String(size_type n) : _data(new char[n]), _length(0), _capacity(n) {}
 
+String::String(size_type n, char c) : String(n + 1)
+{
+    while(n-- > 0)
+    {
+        push_back(c);
+    }
+}
+
 String::String(const self_type& origin) : String()
 {
     if(origin.empty()) { return; }
@@ -186,14 +194,57 @@ bool String::compare_equal(const self_type& str) const
 }
 
 /* Modifiers */
-void String::push_back(const_reference character)
+String::self_type& String::push_back(const_reference character)
 {
     if(_length >= _capacity - 1) { resize(_capacity * 2); }
 
     _data[_length++] = character;
     _data[_length] = '\0';
 
-    return;
+    return *this;
+}
+
+String::self_type& String::append(const self_type& str)
+{
+    reserve(_capacity + str._capacity);
+    return append(str._data);
+}
+
+String::self_type& String::append(const_pointer str)
+{
+    if (catch_null_exception(str)) { return *this; }
+
+    for (size_type index = 0; str[index] != '\0'; ++index)
+    {
+        push_back(str[index]);
+    }
+    _data[_length] = '\0';
+
+    return *this;
+}
+
+String::self_type& String::append(const_pointer str, size_type n)
+{
+    if (catch_null_exception(str)) { return *this; }
+
+    for (size_type i = 0; str[i] != '\0' && n-- > 0; ++i)
+    {
+        push_back(str[i]);
+    }
+    _data[_length] = '\0';
+
+    return *this;
+
+}
+
+String::self_type& String::append(size_type n, char c)
+{
+    return append(String(n, c));
+}
+
+String::self_type& String::append(std::initializer_list<char> list)
+{
+    return append(list.begin(), list.end());
 }
 
 /* Pythonic Modifiers */

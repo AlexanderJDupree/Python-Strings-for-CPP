@@ -14,6 +14,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include "catch.hpp"
 #include "string.hpp"
 
@@ -59,6 +60,14 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
         String copy(origin);
 
         REQUIRE(copy == origin);
+    }
+    SECTION("Fill construction")
+    {
+        String string(5, '!');
+
+        REQUIRE(string == "!!!!!");
+        REQUIRE(string.length() == 5);
+        REQUIRE(string.capacity() == 6);
     }
 }
 
@@ -549,4 +558,72 @@ TEST_CASE("swapcase() to change casing of a string", "[String], [python], [swapc
 
         REQUIRE(string.swapcase() == "hE!lO");
     } 
+}
+
+TEST_CASE("Appending to the endf of a string", "[String], [modifiers], [append]")
+{
+    SECTION("A populated string and a c-string")
+    {
+        String string("Hello, ");
+        const char* str = "World!";
+
+        REQUIRE(string.append(str) == "Hello, World!");
+    }
+    SECTION("Two populated strings")
+    {
+        String fname("Alex ");
+        String lname("DuPree");
+
+        REQUIRE(fname.append(lname) == "Alex DuPree");
+    }
+    SECTION("A populated string and an empty one")
+    {
+        String string("Hello");
+        String empty;
+
+        REQUIRE(string.append(empty) == "Hello");
+    }
+    SECTION("Appending to the end of a empty string")
+    {
+        String empty;
+        String string("Hello");
+
+        REQUIRE(empty.append(string) == "Hello");
+    }
+    SECTION("Appending fill characters")
+    {
+        String string("Hey");
+
+        REQUIRE(string.append(4, 'y') == "Heyyyyy");
+    }
+    SECTION("Appending with iterators")
+    {
+        std::vector<char> letters {'A', 'B', 'C', 'D' };
+
+        String string;
+
+        string.append(letters.begin(), letters.end());
+
+        REQUIRE(string == "ABCD");
+    }
+    SECTION("Appending with an initializer list")
+    {
+        String string;
+
+        REQUIRE(string.append({ 'A', 'B', 'C', 'D' }) == "ABCD");
+    }
+    SECTION("Appending a substring")
+    {
+        String string;
+        const char* str = "Hello World";
+
+        REQUIRE(string.append(str, 5) == "Hello");
+    }
+    SECTION("Appending a substring larger than the origin")
+    {
+        String string;
+        const char* str = "Hello World";
+
+        REQUIRE(string.append(str, 500) == str);
+    }
 }
