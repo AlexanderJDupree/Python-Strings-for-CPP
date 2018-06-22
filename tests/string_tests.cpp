@@ -606,4 +606,24 @@ TEST_CASE("Appending to the endf of a string", "[String], [modifiers], [append]"
 
         REQUIRE(string == "ABCD");
     }
+    SECTION("Appending with an initializer list")
+    {
+        String string;
+
+        REQUIRE(string.append({ 'A', 'B', 'C', 'D' }) == "ABCD");
+    }
+    SECTION("Appending a substring")
+    {
+        String string;
+        const char* str = "Hello World";
+
+        REQUIRE(string.append(str, 5) == "Hello");
+    }
+    SECTION("Appending a substring larger than the origin")
+    {
+        String string;
+        const char* str = "Hello World";
+
+        REQUIRE(string.append(str, 500) == str);
+    }
 }

@@ -223,19 +223,28 @@ String::self_type& String::append(const_pointer str)
     return *this;
 }
 
+String::self_type& String::append(const_pointer str, size_type n)
+{
+    if (catch_null_exception(str)) { return *this; }
+
+    for (size_type i = 0; str[i] != '\0' && n-- > 0; ++i)
+    {
+        push_back(str[i]);
+    }
+    _data[_length] = '\0';
+
+    return *this;
+
+}
+
 String::self_type& String::append(size_type n, char c)
 {
     return append(String(n, c));
 }
 
-template <class InputIterator>
-String& String::append(InputIterator first, InputIterator last)
+String::self_type& String::append(std::initializer_list<char> list)
 {
-    for (; first != last; ++first)
-    {
-        push_back(*first);
-    }
-    return *this;
+    return append(list.begin(), list.end());
 }
 
 /* Pythonic Modifiers */
