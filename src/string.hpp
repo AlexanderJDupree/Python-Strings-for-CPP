@@ -63,6 +63,10 @@ public:
     // Copy
     String(const self_type& origin);
 
+    // Initializer List
+    explicit String(std::initializer_list<char> li);
+    String(std::initializer_list<const char*> li, value_type delim = ' ');
+
     // Destructor
     ~String();
 
@@ -93,25 +97,28 @@ public:
 
     /* Modifiers */
     self_type& push_back(const_reference character);
+    self_type& append(const_reference character);
     self_type& append(const self_type& str);
     self_type& append(const_pointer str);
     self_type& append(const_pointer str, size_type n);
     self_type& append(size_type n, char c);
-    self_type& append(std::initializer_list<char> list);
+    self_type& append(std::initializer_list<char> li);
 
     template <class InputIterator>
     self_type& append(InputIterator first, InputIterator last);
 
 
     /* Pythonic Modifiers */
+    // TODO these modifiers need to return COPIES 
     self_type& upper();
     self_type& lower();
     self_type& swapcase();
-    list split(value_type delim = ' ');
+    self_type strip(value_type delim = ' ') const;
+    list split(value_type delim = ' ') const;
     
-    bool isupper();
-    bool islower();
-    bool isnumeric();
+    bool isupper() const;
+    bool islower() const;
+    bool isnumeric() const;
 
     /* Operator Overloads */
     friend bool operator==(const self_type& lhs, const_pointer rhs);
