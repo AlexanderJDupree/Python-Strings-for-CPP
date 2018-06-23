@@ -64,7 +64,7 @@ public:
     String(const self_type& origin);
 
     // Initializer List
-    String(std::initializer_list<char> li);
+    explicit String(std::initializer_list<char> li);
     String(std::initializer_list<const char*> li, value_type delim = ' ');
 
     // Destructor
