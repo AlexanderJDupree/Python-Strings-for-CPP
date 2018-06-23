@@ -104,6 +104,28 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
 
         REQUIRE(string.empty());
     }
+    SECTION("Initializer list construction")
+    {
+        String string { 'a', 'b', 'c', 'd' };
+
+        REQUIRE(string == "abcd");
+        REQUIRE(string.length() == 4);
+        REQUIRE(string.capacity() == 5);
+    }
+    SECTION("Initializer list with string literals")
+    {
+        String string { "one", "two", "three", "four" };
+
+        REQUIRE(string == "one two three four");
+        REQUIRE(string.length() == 18);
+        REQUIRE(string.capacity() == 31);
+    }
+    SECTION("Initializer list with comma seperated delimiter")
+    {
+        String string({"one", "two", "three"}, ',');
+
+        REQUIRE(string == "one,two,three");
+    }
 }
 
 TEST_CASE("Capacity functions", "[String], [capacity]")
@@ -660,5 +682,52 @@ TEST_CASE("Appending to the endf of a string", "[String], [modifiers], [append]"
         const char* str = "Hello World";
 
         REQUIRE(string.append(str, 500) == str);
+    }
+    SECTION("Appending a character")
+    {
+        String string;
+
+        REQUIRE(string.append('A') == "A");
+    }
+}
+
+TEST_CASE("splitting string into a list", "[String], [python], [split]")
+{
+    SECTION("A space delimited string")
+    {
+        String string("one two three");
+        String::list words { String("one"), String("two"), String("three") };
+
+        REQUIRE(string.split() == words);
+    }
+    SECTION("A comma delimited string")
+    {
+        String string ("one, two, three");
+        String::list words { String("one"), String("two"), String("three") };
+
+        REQUIRE(string.split(',') == words);
+    }
+    SECTION("Too many commas")
+    {
+        String string("one, two, three,");
+        String::list words { String("one"), String("two"), String("three"), String() };
+
+        REQUIRE(string.split(',') == words);
+    }
+}
+
+TEST_CASE("stripping trailing characters off string", "[String], [python], [strip]")
+{
+    SECTION("strip trailing whitespace")
+    {
+        String string("  stuff  ");
+        
+        REQUIRE(string.strip() == "stuff");
+    }
+    SECTION("Strip trailing characters")
+    {
+        String string("---  stuff  -");
+
+        REQUIRE(string.strip('-') == "  stuff  ");
     }
 }

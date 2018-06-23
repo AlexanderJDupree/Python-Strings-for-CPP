@@ -48,6 +48,25 @@ String::String(const self_type& origin) : String()
     _data[_length] = '\0';
 }
 
+String::String(std::initializer_list<char> li) : String(li.size() + 1)
+{
+    append(li.begin(), li.end());
+}
+
+String::String(std::initializer_list<const char*> li, value_type delim)
+    : String()
+{   
+    std::initializer_list<const char*>::iterator it;
+    for(it = li.begin(); it != li.end(); ++it)
+    {
+        append(*it);
+        if(it + 1 != li.end())
+        {
+            push_back(delim);
+        }
+    }
+}
+
 String::~String()
 {
     delete [] _data;
@@ -210,6 +229,13 @@ String::self_type& String::push_back(const_reference character)
     return *this;
 }
 
+String::self_type& String::append(const_reference character)
+{
+    push_back(character);
+
+    return *this;
+}
+
 String::self_type& String::append(const self_type& str)
 {
     reserve(_capacity + str._capacity);
@@ -248,9 +274,9 @@ String::self_type& String::append(size_type n, char c)
     return append(String(n, c));
 }
 
-String::self_type& String::append(std::initializer_list<char> list)
+String::self_type& String::append(std::initializer_list<char> li)
 {
-    return append(list.begin(), list.end());
+    return append(li.begin(), li.end());
 }
 
 /* Pythonic Modifiers */
@@ -282,7 +308,47 @@ String::self_type& String::swapcase()
     return *this;
 }
 
-bool String::isupper()
+String::self_type String::strip(value_type delim) const
+{
+    if(catch_null_exception(_data)) { return *this; }
+
+    const_iterator left = cbegin();
+    const_iterator right = cend() - 1;
+
+    while(*left == delim)
+    {
+        ++left;
+    }
+    while(*right == delim)
+    {
+        --right;
+    }
+    return String(left, ++right);
+}
+
+String::list String::split(value_type delim) const
+{
+    list words;
+    words.reserve(_length);
+
+    const_iterator first = begin();
+    const_iterator last = begin();
+
+    while(last != end())
+    {
+        if(*last == delim)
+        {
+            words.emplace_back(String(first, last).strip());
+            ++(first = last);
+        }
+        ++last;
+    }
+    words.emplace_back(String(first, last).strip());
+    words.shrink_to_fit();
+    return words;
+}
+
+bool String::isupper() const
 {
     bool result = false;
     for(const_iterator it = cbegin(); it != cend(); ++it)
@@ -299,7 +365,7 @@ bool String::isupper()
     return result;
 }
 
-bool String::islower()
+bool String::islower() const
 {
     bool result = false;
     for(const_iterator it = cbegin(); it != cend(); ++it)
@@ -315,7 +381,7 @@ bool String::islower()
     }
     return result;
 }
-bool String::isnumeric()
+bool String::isnumeric() const
 {
     bool result = false;
     for(const_iterator it = cbegin(); it != cend(); ++it)
