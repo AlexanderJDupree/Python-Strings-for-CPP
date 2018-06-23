@@ -20,7 +20,13 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 /* Constructors */
 String::String(const_pointer str) : String(len(str) + 1)
 {
-    copy(str, _capacity);
+    _length = copy(str, _capacity);
+    _data[_length] = '\0';
+}
+
+String::String(const_pointer buffer, size_type n) : String(n + 1)
+{
+    _length = copy(buffer, n);
     _data[_length] = '\0';
 }
 
@@ -38,7 +44,7 @@ String::String(const self_type& origin) : String()
 {
     if(origin.empty()) { return; }
 
-    copy(origin._data, len(origin._data));
+    _length = copy(origin._data, len(origin._data));
     _data[_length] = '\0';
 }
 
