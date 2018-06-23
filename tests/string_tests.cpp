@@ -69,6 +69,41 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
         REQUIRE(string.length() == 5);
         REQUIRE(string.capacity() == 6);
     }
+    SECTION("Buffer construction")
+    {
+        char buffer[100];
+        for(unsigned i = 0; i < 10; ++i)
+        {
+            buffer[i] = 'A';
+        }
+
+        String string(buffer, 10);
+
+        REQUIRE(string == "AAAAAAAAAA");
+        REQUIRE(string.length() == 10);
+        REQUIRE(string.capacity() == 11);
+    }
+    SECTION("Range based construction")
+    {
+        std::vector<char> letters { 'a', 'b', 'c', 'd' };
+        String string(letters.begin(), letters.end());
+
+        REQUIRE(string == "abcd");
+    }
+    SECTION("Range based construction with empty container")
+    {
+        std::vector<char> letters;
+        String string(letters.begin(), letters.end());
+
+        REQUIRE(string.empty());
+    }
+    SECTION("Ranged based construciton with empty string")
+    {
+        String empty;
+        String string(empty.begin(), empty.end());
+
+        REQUIRE(string.empty());
+    }
 }
 
 TEST_CASE("Capacity functions", "[String], [capacity]")

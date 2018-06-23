@@ -16,6 +16,7 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #define STRING_H
 
 #include <cctype>
+#include <vector>
 #include <cstring>
 #include <cstddef>
 #include <iostream>
@@ -27,17 +28,18 @@ class String
 {
 public:
 
-    typedef String      self_type;
-    typedef char        value_type;
-    typedef char&       reference;
-    typedef const char& const_reference;
-    typedef char*       pointer;
-    typedef const char* const_pointer;
-    typedef ptrdiff_t   difference_type;
-    typedef size_t      size_type;
-    typedef int         index_type;
-    typedef char*       iterator;
-    typedef const char* const_iterator;
+    typedef String                 self_type;
+    typedef char                   value_type;
+    typedef char&                  reference;
+    typedef const char&            const_reference;
+    typedef char*                  pointer;
+    typedef const char*            const_pointer;
+    typedef ptrdiff_t              difference_type;
+    typedef size_t                 size_type;
+    typedef int                    index_type;
+    typedef char*                  iterator;
+    typedef const char*            const_iterator;
+    typedef std::vector<self_type> list;
 
     /* Constructors */
     String() : _data(nullptr), _length(0), _capacity(1) {}
@@ -45,11 +47,18 @@ public:
     // C-string 
     explicit String(const_pointer str);
 
+    // Buffer
+    String(const_pointer buffer, size_type n);
+
     // Reserve
     explicit String(size_type n);
 
     // Fill
     String(size_type n, char c);
+
+    // Range
+    template <class InputIterator>
+    String(InputIterator begin, InputIterator end);
 
     // Copy
     String(const self_type& origin);
@@ -98,6 +107,7 @@ public:
     self_type& upper();
     self_type& lower();
     self_type& swapcase();
+    list split(value_type delim = ' ');
     
     bool isupper();
     bool islower();
@@ -149,8 +159,17 @@ struct out_of_range : public std::exception
     }
 };
 
-
 // TODO move this out into the source file.
+template <class InputIterator>
+String::String(InputIterator begin, InputIterator end) : String()
+{
+    for(; begin != end; ++begin)
+    {
+        push_back(*begin);
+    }
+}
+
+
 template <class InputIterator>
 String& String::append(InputIterator first, InputIterator last)
 {
