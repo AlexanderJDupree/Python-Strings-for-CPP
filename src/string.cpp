@@ -282,11 +282,6 @@ String::self_type& String::swapcase()
     return *this;
 }
 
-String::list String::split(value_type delim)
-{
-    return list();
-}
-
 bool String::isupper()
 {
     bool result = false;
