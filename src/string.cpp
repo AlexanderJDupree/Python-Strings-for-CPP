@@ -441,6 +441,25 @@ String::const_reference String::operator[](index_type pos) const
     return _data[pos];
 }
 
+String::self_type& String::operator=(String str)
+{
+    swap(*this, str);
+
+    return *this;
+}
+
+/* Swap */
+void String::swap(String& new_string, String& old_string) noexcept
+{
+    // Enables ADL
+    using std::swap;
+
+    // Swap pointers, reassigns ownership
+    swap(new_string._data, old_string._data);
+    swap(new_string._length, old_string._length);
+    return;
+}
+
 /* Private */
 void String::validate_pointer(const_pointer str)
 {
