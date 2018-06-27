@@ -738,14 +738,19 @@ TEST_CASE("Using the copy-assignment operator" , "[String], [operator], [copy]")
     {
         String string("Hello!");
 
-        String str = string;
+        String str("junk");
+
+        str = string;
 
         REQUIRE(str == string);
     }
     SECTION("An empty string")
     {
         String string;
-        String str = string;
+
+        String str("Junk");
+
+        str = string;
 
         REQUIRE(str == string);
     }

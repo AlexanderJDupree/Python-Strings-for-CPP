@@ -456,6 +456,7 @@ void String::swap(String& new_string, String& old_string) noexcept
 
     // Swap pointers, reassigns ownership
     swap(new_string._data, old_string._data);
+    swap(new_string._length, old_string._length);
     return;
 }
 
