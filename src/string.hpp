@@ -132,6 +132,12 @@ public:
     reference operator[](index_type pos);
     const_reference operator[](index_type pos) const;
 
+    // str is passed by value to satisfy the exception safe copy-and-swap idiom
+    self_type& operator=(String str); 
+
+    /* Swap */
+    static void swap(String& new_string, String& old_string) noexcept;
+
 private:
 
     pointer _data;

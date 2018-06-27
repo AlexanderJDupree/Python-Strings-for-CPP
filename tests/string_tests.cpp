@@ -731,3 +731,23 @@ TEST_CASE("stripping trailing characters off string", "[String], [python], [stri
         REQUIRE(string.strip('-') == "  stuff  ");
     }
 }
+
+TEST_CASE("Using the copy-assignment operator" , "[String], [operator], [copy]")
+{
+    SECTION("A populated string")
+    {
+        String string("Hello!");
+
+        String str = string;
+
+        REQUIRE(str == string);
+    }
+    SECTION("An empty string")
+    {
+        String string;
+        String str = string;
+
+        REQUIRE(str == string);
+    }
+
+}
