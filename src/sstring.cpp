@@ -198,6 +198,7 @@ SString::self_type& SString::operator=(const SString& str)
     return *this;
 }
 
+// TODO Review if there is a faster way to perform reassignment with a c-string
 SString::self_type& SString::operator=(const_pointer str)
 {
     validate_pointer(str);
@@ -219,8 +220,10 @@ void SString::swap(SString& new_string, SString& old_string)
 
 /****** CONCATENATION ******/
 
+// TODO Review and establish a faster way to perform string concatenation
 SString operator+(const SString& lhs, const char* rhs)
 {
+    // TODO create an append function that this operator will call
     char* buffer = new char[lhs.length() + std::strlen(rhs)];
     std::strcpy(buffer, lhs._data);
     std::strcat(buffer, rhs);
@@ -322,7 +325,7 @@ bool operator> (const SString& lhs, const char* rhs)
 }
 bool operator> (const char* lhs, const SString& rhs)
 {
-    return !(rhs < lhs);
+    return rhs < lhs;
 }
 bool operator> (const SString& lhs, const SString& rhs)
 {

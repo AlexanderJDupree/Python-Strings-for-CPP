@@ -148,6 +148,29 @@ TEST_CASE("Capacity functions", "[SString], [capacity]")
     }
 }
 
+TEST_CASE("Substring and truncation", "[SString], [operations], [substring], [truncate]")
+{
+    SECTION("Valid substring")
+    {
+        SString str("Hello World");
+
+        REQUIRE(str.substring(1, 4) == "ello");
+    }
+    SECTION("Invalid Substring")
+    {
+        SString str("Hello");
+
+        try
+        {
+            str.substring(0, 10);
+        }
+        catch(const invalid_substring& err)
+        {
+            REQUIRE(err.what() == SString("Error, substring bounds do not exist"));
+        }
+    }
+}
+
 TEST_CASE("Relational Operators", "[SString], [relational], [operators], [overloads]")
 {
     SECTION("Equality operators on two identical strings")
@@ -192,6 +215,32 @@ TEST_CASE("Relational Operators", "[SString], [relational], [operators], [overlo
 
         REQUIRE(lhs != rhs);
     }
+    SECTION("Two differing strings")
+    {
+        SString lhs("Hello");
+        SString rhs("Hello World");
+
+        REQUIRE(lhs != rhs);
+    }
+    SECTION("Freestanding equality")
+    {
+        SString rhs("Test");
+        REQUIRE("not test" != rhs);
+    }
+}
+
+TEST_CASE("Comparison operators with strings", "[SString], [comparison], [operators]")
+{
+    SECTION("Freestanding comparisons")
+    {
+        SString str1("aaa");
+        SString str2("bbb");
+        const char* cstring("ccc");
+
+        REQUIRE(cstring > str1);
+        REQUIRE_FALSE(str1 > cstring);
+        REQUIRE(str2 > str1);
+    }
 }
 
 TEST_CASE("Element access with [] operator", "[SString], [operator]")
@@ -212,13 +261,13 @@ TEST_CASE("Element access with [] operator", "[SString], [operator]")
 
         try 
         {
-            REQUIRE_THROWS_AS(string[10], bad_index);
+            string[10];
         } 
         catch (const bad_index& err) 
         {
             REQUIRE(err.index() == 10);
+            REQUIRE(err.what() == SString("Provided Index is out of bounds"));
         }
-
     }
     /*SECTION("Accessing elements with reverse index")
     {
@@ -558,6 +607,47 @@ TEST_CASE("Using the copy-assignment operator" , "[SString], [operator], [copy]"
         str = string;
 
         REQUIRE(str == string);
+    }
+    SECTION("Reassign to a c-string")
+    {
+        SString str("junk");
+
+        str = "Hello World";
+
+        REQUIRE(str == "Hello World");
+    }
+}
+
+TEST_CASE("String concatenation", "[SString], [operator], [concatenation]")
+{
+    SECTION("Concatenate c-strings with SString")
+    {
+        const char* cstring = "World";
+        SString str = "Hello ";
+
+        REQUIRE(str + cstring == "Hello World");
+        REQUIRE(cstring + str == "WorldHello ");
+    }
+    SECTION("Concatenate two SStrings")
+    {
+        SString str1 = "Hello ";
+        SString str2 = "World";
+
+        REQUIRE(str1 + str2 == "Hello World");
+    }
+}
+
+TEST_CASE("String construction with >> operator", "[SString], [operator], [read_input]")
+{
+    SECTION("Using istringstream to simulate input") 
+    {
+        SString str;
+        std::istringstream in;
+
+        in.str("test");
+        in >> str;
+
+        REQUIRE(str == "test");
     }
 }
 
