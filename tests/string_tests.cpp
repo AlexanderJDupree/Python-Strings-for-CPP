@@ -16,58 +16,54 @@ https://github.com/AlexanderJDupree/Python-Strings-for-CPP
 #include <sstream>
 #include <vector>
 #include "catch.hpp"
-#include "string.hpp"
+#include "sstring.h"
 
-TEST_CASE("Constructing Strings", "[String], [constructors]")
+TEST_CASE("Constructing Strings", "[SString], [constructors]")
 {
     SECTION("Default Construction")
     {
-        String str;
+        SString str;
 
         REQUIRE(str.length() == 0);
-        REQUIRE(str.capacity() == 1);
+        REQUIRE(str.size() == 1);
     }
     SECTION("Construction with a C-string")
     {
         const char* test = "Hello";
-        String str(test);
+        SString str(test);
 
         REQUIRE(str == test);
         REQUIRE(str.length() == std::strlen(test));
-        REQUIRE(str.capacity() == std::strlen(test) + 1);
+        REQUIRE(str.size() == std::strlen(test) + 1);
     }
-    SECTION("Reserve Construction")
+    SECTION("Construction with a nullptr, creates empty string")
     {
-        String str(10);
+        SString str(nullptr);
 
         REQUIRE(str.length() == 0);
-        REQUIRE(str.capacity() == 10);
-    }
-    SECTION("Construction with a nullptr")
-    {
-        REQUIRE_THROWS_AS(String(nullptr), std::invalid_argument);
+        REQUIRE(str.size() == 1);
     }
     SECTION("Copy construction")
     {
-        String origin("Hello");
-        String copy(origin);
+        SString origin("Hello");
+        SString copy(origin);
 
         REQUIRE(copy == origin);
     }
     SECTION("Copy construction with empty string")
     {
-        String origin;
-        String copy(origin);
+        SString origin;
+        SString copy(origin);
 
         REQUIRE(copy == origin);
     }
     SECTION("Fill construction")
     {
-        String string(5, '!');
+        SString string(5, '!');
 
         REQUIRE(string == "!!!!!");
         REQUIRE(string.length() == 5);
-        REQUIRE(string.capacity() == 6);
+        REQUIRE(string.size() == 6);
     }
     SECTION("Buffer construction")
     {
@@ -77,36 +73,37 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
             buffer[i] = 'A';
         }
 
-        String string(buffer, 10);
+        SString string(buffer, 10);
 
         REQUIRE(string == "AAAAAAAAAA");
         REQUIRE(string.length() == 10);
-        REQUIRE(string.capacity() == 11);
+        REQUIRE(string.size() == 11);
     }
+    /*
     SECTION("Range based construction")
     {
         std::vector<char> letters { 'a', 'b', 'c', 'd' };
-        String string(letters.begin(), letters.end());
+        SString string(letters.begin(), letters.end());
 
         REQUIRE(string == "abcd");
     }
     SECTION("Range based construction with empty container")
     {
         std::vector<char> letters;
-        String string(letters.begin(), letters.end());
+        SString string(letters.begin(), letters.end());
 
         REQUIRE(string.empty());
     }
     SECTION("Ranged based construciton with empty string")
     {
-        String empty;
-        String string(empty.begin(), empty.end());
+        SString empty;
+        SString string(empty.begin(), empty.end());
 
         REQUIRE(string.empty());
     }
     SECTION("Initializer list construction")
     {
-        String string { 'a', 'b', 'c', 'd' };
+        SString string { 'a', 'b', 'c', 'd' };
 
         REQUIRE(string == "abcd");
         REQUIRE(string.length() == 4);
@@ -114,7 +111,7 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
     }
     SECTION("Initializer list with string literals")
     {
-        String string { "one", "two", "three", "four" };
+        SString string { "one", "two", "three", "four" };
 
         REQUIRE(string == "one two three four");
         REQUIRE(string.length() == 18);
@@ -122,53 +119,77 @@ TEST_CASE("Constructing Strings", "[String], [constructors]")
     }
     SECTION("Initializer list with comma seperated delimiter")
     {
-        String string({"one", "two", "three"}, ',');
+        SString string({"one", "two", "three"}, ',');
 
         REQUIRE(string == "one,two,three");
     }
+    */
 }
 
-TEST_CASE("Capacity functions", "[String], [capacity]")
+TEST_CASE("Capacity functions", "[SString], [capacity]")
 {
     SECTION("Size of an empty String")
     {
-        String str;
+        SString str;
 
-        REQUIRE(str.size() == 0);
+        REQUIRE(str.length() == 0);
     }
     SECTION("Capcacity of an empty String")
     {
-        String str;
+        SString str;
 
-        REQUIRE(str.capacity() == 1);
+        REQUIRE(str.size() == 1);
     }
     SECTION("Test if string is empty")
     {
-        String str;
+        SString str;
 
         REQUIRE(str.empty());
     }
 }
 
-TEST_CASE("Relational Operators", "[String], [relational], [operators], [overloads]")
+TEST_CASE("Substring and truncation", "[SString], [operations], [substring], [truncate]")
+{
+    SECTION("Valid substring")
+    {
+        SString str("Hello World");
+
+        REQUIRE(str.substring(1, 4) == "ello");
+    }
+    SECTION("Invalid Substring")
+    {
+        SString str("Hello");
+
+        try
+        {
+            str.substring(0, 10);
+        }
+        catch(const invalid_substring& err)
+        {
+            REQUIRE(err.what() == SString("Error, substring bounds do not exist"));
+        }
+    }
+}
+
+TEST_CASE("Relational Operators", "[SString], [relational], [operators], [overloads]")
 {
     SECTION("Equality operators on two identical strings")
     {
-        String lhs("Hello");
-        String rhs("Hello");
+        SString lhs("Hello");
+        SString rhs("Hello");
 
         REQUIRE(lhs == rhs);
     }
     SECTION("Inequality operators")
     {
-        String lhs("Hello");
-        String rhs;
+        SString lhs("Hello");
+        SString rhs;
 
         REQUIRE(lhs != rhs);
     }
     SECTION("Equality comparison with c-strings")
     {
-        String lhs("Hello");
+        SString lhs("Hello");
         const char* rhs = "Hello";
 
         REQUIRE(lhs == rhs);
@@ -176,158 +197,58 @@ TEST_CASE("Relational Operators", "[String], [relational], [operators], [overloa
     }
     SECTION("Equality comparison with nullptr")
     {
-        String lhs("Hello");
+        SString lhs("Hello");
 
         REQUIRE(lhs != nullptr);
     }
     SECTION("Two default strings")
     {
-        String lhs;
-        String rhs;
+        SString lhs;
+        SString rhs;
 
         REQUIRE(lhs == rhs);
     }
     SECTION("An unitialized string and a c-string")
     {
-        String lhs;
+        SString lhs;
         const char* rhs = "Hello";
 
         REQUIRE(lhs != rhs);
     }
-}
-
-TEST_CASE("Copy Functions", "[String], [operations], [copy]")
-{
-    SECTION("An empty string and a populated c-string")
+    SECTION("Two differing strings")
     {
-        String string;
-        const char* str = "Hello";
+        SString lhs("Hello");
+        SString rhs("Hello World");
 
-        string.copy(str, String::len(str));
-
-        REQUIRE(string == str);
-        REQUIRE(string.length() == 5);
-        REQUIRE(string.capacity() == 6);
+        REQUIRE(lhs != rhs);
     }
-    SECTION("An empty string and a nullptr")
+    SECTION("Freestanding equality")
     {
-        String string;
-        
-        REQUIRE_THROWS_AS(string.copy(nullptr, 10), std::invalid_argument);
-    }
-    SECTION("Copy a substring into a c-string")
-    {
-        String string("Hello World");
-        String substring("World");
-        char* str = new char[6];
-
-        unsigned length = String::copy(string, str, 5, 6);
-        str[length] = '\0';
-
-        REQUIRE(str == substring);
-
-        delete [] str;
-    }
-    SECTION("Copy an uninitiazlied string into a c-string")
-    {
-        String string;
-        char* str;
-
-        REQUIRE_THROWS_AS(String::copy(string, str, 5, 5), std::invalid_argument);
-    }
-    SECTION("Copy a string into a nullptr")
-    {
-        String string("Budweiser");
-
-        REQUIRE_THROWS_AS(String::copy(string, nullptr, 5, 5), std::invalid_argument);
+        SString rhs("Test");
+        REQUIRE("not test" != rhs);
     }
 }
 
-TEST_CASE("Resize function", "[String], [operations], [resize]")
+TEST_CASE("Comparison operators with strings", "[SString], [comparison], [operators]")
 {
-    SECTION("An empty string")
+    SECTION("Freestanding comparisons")
     {
-        String string;
+        SString str1("aaa");
+        SString str2("bbb");
+        const char* cstring("ccc");
 
-        string.resize(100);
-
-        REQUIRE(string.capacity() == 101);
-        REQUIRE(string.length() == 0);
-    }
-    SECTION("A populated string")
-    {
-        const char* test = "Hello World";
-        String string(test);
-
-        string.resize(1000);
-
-        REQUIRE(string.capacity() == 1001);
-        REQUIRE(string.length() == String::len(test));
-        REQUIRE(string == test);
-    }
-    SECTION("Resizing to smaller capacity")
-    {
-        const char* test = "Hello World";
-        String string(test);
-
-        string.resize(5);
-        
-        REQUIRE(string.capacity() == 6);
-        REQUIRE(string.length() == 5);
-        REQUIRE(string == "Hello");
-    }
-    SECTION("Resizing to smaller capacity from a reserved string")
-    {
-        String string(100);
-
-        string.resize(0);
-
-        REQUIRE(string.capacity() == 1);
-        REQUIRE(string.length() == 0);
+        REQUIRE(cstring > str1);
+        REQUIRE_FALSE(str1 > cstring);
+        REQUIRE(str2 > str1);
     }
 }
 
-TEST_CASE("Reserve function", "[String], [operations], [reserve]")
+TEST_CASE("Element access with [] operator", "[SString], [operator]")
 {
-    SECTION("An empty string")
-    {
-        String string;
-
-        string.reserve(100);
-
-        REQUIRE(string.capacity() == 100);
-        REQUIRE(string.length() == 0);
-    }
-    SECTION("A populated string")
-    {
-        const char* test = "Hello World";
-        String string(test);
-
-        string.reserve(1000);
-
-        REQUIRE(string.capacity() == 1000);
-        REQUIRE(string.length() == String::len(test));
-        REQUIRE(string == test);
-    }
-    SECTION("Reserving to a smaller capacity does nothing")
-    {
-        const char* test = "Hello World";
-        String string(test);
-
-        string.reserve(0);
-
-        REQUIRE(string.capacity() == String::len(test) + 1);
-        REQUIRE(string.length() == String::len(test));
-        REQUIRE(string == test);
-    }
-}
-
-TEST_CASE("Element access with [] operator", "[String], [operator]")
-{
-    SECTION("A populated String")
+    SECTION("A populated SString")
     {
         const char* test = "Hello!";
-        String string(test);
+        SString string(test);
 
         for (unsigned i = 0; i < string.length(); ++i)
         {
@@ -336,16 +257,24 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
     }
     SECTION("Accessing out of bounds element")
     {
-        String string("Hello");
+        SString string("Hello");
 
-        REQUIRE_THROWS_AS(string[10], out_of_range);
+        try 
+        {
+            string[10];
+        } 
+        catch (const bad_index& err) 
+        {
+            REQUIRE(err.index() == 10);
+            REQUIRE(err.what() == SString("Provided Index is out of bounds"));
+        }
     }
-    SECTION("Accessing elements with reverse index")
+    /*SECTION("Accessing elements with reverse index")
     {
         const char* test = "!olleH";
         const char* reverse = "Hello!";
 
-        String string(test);
+        SString string(test);
 
         unsigned int n = 0;
         for (int i = -1; i >= static_cast<int>(string.length() * -1); --i)
@@ -356,29 +285,21 @@ TEST_CASE("Element access with [] operator", "[String], [operator]")
     }
     SECTION("Accessing out of bounds element with reverse index")
     {
-        String string("Hello!");
+        SString string("Hello!");
 
         REQUIRE_THROWS_AS(string[-100], out_of_range);
     }
-    SECTION("Accessing elements in a const string")
-    {
-        const char* test = "Hello!";
-        const String string(test);
-
-        for (unsigned i = 0; i < string.length(); ++i)
-        {
-            REQUIRE(string[i] == test[i]);
-        }
-    }
+    */
+    
 }
 
-TEST_CASE("Stream operator overlaods", "[String], [operators]")
+TEST_CASE("Stream operator overlaods", "[SString], [operators]")
 {
     SECTION("<< operator")
     {
         std::stringstream ss;
         const char* test = "Hello!\t";
-        String string(test);
+        SString string(test);
 
         ss << string;
 
@@ -386,88 +307,30 @@ TEST_CASE("Stream operator overlaods", "[String], [operators]")
     }
 }
 
-TEST_CASE("Custom exceptions", "[String], [exceptions]")
-{
-    SECTION("Out of range exception")
-    {
-        String string("Test");
-        String message("error, index pos is out of bounds");
 
-        try
-        {
-            string[1000];
-        } 
-        catch (const out_of_range& err)
-        {
-            REQUIRE(err.what() == message);
-            REQUIRE(err.index() == 1000);
-        }
-    }
-}
-
-TEST_CASE("Push_back modifier", "[String], [modifiers], [push_back]")
-{
-    SECTION("A populated list")
-    {
-        String string("Hell");
-
-        string.push_back('o');
-        string.push_back('!');
-
-        REQUIRE(string == "Hello!");
-        REQUIRE(string.capacity() == 11);
-        REQUIRE(string.length() == 6);
-    }
-    SECTION("An empty list")
-    {
-        String string;
-
-        string.push_back('O');
-        string.push_back('K');
-        string.push_back('!');
-        string.push_back('!');
-
-
-        REQUIRE(string == "OK!!");
-        REQUIRE(string.capacity() == 7);
-        REQUIRE(string.length() == 4);
-    }
-}
-
-TEST_CASE("Iterators for element access and string traversal", "[String], [iterators]")
+TEST_CASE("Iterators for element access and string traversal", "[SString], [iterators]")
 {
     SECTION("A populated string")
     {
         const char* test = "Hello!";
-        String string(test);
+        SString string(test);
 
         unsigned i = 0;
-        for(String::iterator it = string.begin(); it != string.end(); ++it)
+        for(SString::const_iterator it = string.begin(); it != string.end(); ++it)
         {
             REQUIRE(*it == test[i++]);
         }
     }
     SECTION("end() returns a null terminating character")
     {
-        String string("Hi");
+        SString string("Hi");
 
         REQUIRE(*string.end() == '\0');
-    }
-    SECTION("Ranged based for loop")
-    {
-        const char* test = "Hello!";
-        String string(test);
-
-        unsigned i = 0;
-        for (char& letter : string)
-        {
-            REQUIRE(letter == test[i++]);
-        }
     }
     SECTION("Ranged based for loop on const string")
     {
         const char* test = "Hello!";
-        const String string(test);
+        const SString string(test);
 
         unsigned i = 0;
         for (const char& letter : string)
@@ -475,181 +338,171 @@ TEST_CASE("Iterators for element access and string traversal", "[String], [itera
             REQUIRE(letter == test[i++]);
         }
     }
-    SECTION("A const qualified populated string")
-    {
-        const char* test = "Hello!";
-        const String string(test);
-
-        unsigned i = 0;
-        for(String::const_iterator it = string.cbegin(); it != string.cend(); ++it)
-        {
-            REQUIRE(*it == test[i++]);
-        }
-    }
 }
 
-TEST_CASE("isupper() to determine string state", "[String], [bool], [python]")
+/*
+TEST_CASE("isupper() to determine string state", "[SString], [bool], [python]")
 {
     SECTION("A uppercased string")
     {
-        String string("HELLO");
+        SString string("HELLO");
 
         REQUIRE(string.isupper());
     }
     SECTION("A lowercased string")
     {
-        String string("hello");
+        SString string("hello");
 
         REQUIRE(!(string.isupper()));
     }
     SECTION("A mixed case string")
     {
-        String string("HELlO");
+        SString string("HELlO");
         REQUIRE(!(string.isupper()));
     }
     SECTION("A string with symbols and one uppercased character")
     {
-        String string("!@#$%^T");
+        SString string("!@#$%^T");
 
         REQUIRE(string.isupper());
     }
 }
-TEST_CASE("islower() to determine string state", "[String], [bool], [python]")
+TEST_CASE("islower() to determine string state", "[SString], [bool], [python]")
 {
     SECTION("A uppercased string")
     {
-        String string("HELLO");
+        SString string("HELLO");
 
         REQUIRE(!string.islower());
     }
     SECTION("A lowercased string")
     {
-        String string("hello");
+        SString string("hello");
 
         REQUIRE(string.islower());
     }
     SECTION("A mixed case string")
     {
-        String string("helLo");
+        SString string("helLo");
         REQUIRE(!(string.islower()));
     }
     SECTION("A string with symbols and one lowercased character")
     {
-        String string("!@#$%^t");
+        SString string("!@#$%^t");
 
         REQUIRE(string.islower());
     }
 }
 
-TEST_CASE("isnumeric() to determine string state", "[String], [python], [isnumeric]")
+TEST_CASE("isnumeric() to determine string state", "[SString], [python], [isnumeric]")
 {
     SECTION("A numeric string")
     {
-        String string("12345");
+        SString string("12345");
 
         REQUIRE(string.isnumeric());
     }
     SECTION("A non-numeric string")
     {
-        String string("1234f");
+        SString string("1234f");
 
         REQUIRE(!string.isnumeric());
     }
 }
 
-TEST_CASE("upper() to change casing of string", "[String], [python], [upper]")
+TEST_CASE("upper() to change casing of string", "[SString], [python], [upper]")
 {
     SECTION("A lower cased string")
     {
-        String string("hello");
+        SString string("hello");
 
         REQUIRE(string.upper().isupper());
     }
     SECTION("A mixed cased string")
     {
-        String string("hE!!o");
+        SString string("hE!!o");
 
         REQUIRE(string.upper().isupper());
     }
 }
 
-TEST_CASE("lower() to change casing of string", "[String], [python], [lower]")
+TEST_CASE("lower() to change casing of string", "[SString], [python], [lower]")
 {
     SECTION("A upper cased string")
     {
-        String string("HELLO");
+        SString string("HELLO");
 
         REQUIRE(string.lower().islower());
     }
     SECTION("A mixed cased string")
     {
-        String string("hE!!O");
+        SString string("hE!!O");
         
         REQUIRE(string.lower().islower());
     }
     SECTION("An empty string")
     {
-        String string;
+        SString string;
 
         REQUIRE(!(string.lower().islower()));
     }
 }
 
-TEST_CASE("swapcase() to change casing of a string", "[String], [python], [swapcase]")
+TEST_CASE("swapcase() to change casing of a string", "[SString], [python], [swapcase]")
 {
     SECTION("An uppercased string")
     {
-        String string("HELLO");
+        SString string("HELLO");
 
         REQUIRE(string.swapcase().islower());
     }
     SECTION("A lower cased string")
     {
-        String string("hello");
+        SString string("hello");
 
         REQUIRE(string.swapcase().isupper());
     }
     SECTION("A mixed cased string")
     {
-        String string("He!Lo");
+        SString string("He!Lo");
 
         REQUIRE(string.swapcase() == "hE!lO");
     } 
 }
 
-TEST_CASE("Appending to the endf of a string", "[String], [modifiers], [append]")
+TEST_CASE("Appending to the end of a string", "[SString], [modifiers], [append]")
 {
     SECTION("A populated string and a c-string")
     {
-        String string("Hello, ");
+        SString string("Hello, ");
         const char* str = "World!";
 
         REQUIRE(string.append(str) == "Hello, World!");
     }
     SECTION("Two populated strings")
     {
-        String fname("Alex ");
-        String lname("DuPree");
+        SString fname("Alex ");
+        SString lname("DuPree");
 
         REQUIRE(fname.append(lname) == "Alex DuPree");
     }
     SECTION("A populated string and an empty one")
     {
-        String string("Hello");
-        String empty;
+        SString string("Hello");
+        SString empty;
 
         REQUIRE(string.append(empty) == "Hello");
     }
     SECTION("Appending to the end of a empty string")
     {
-        String empty;
-        String string("Hello");
+        SString empty;
+        SString string("Hello");
 
         REQUIRE(empty.append(string) == "Hello");
     }
     SECTION("Appending fill characters")
     {
-        String string("Hey");
+        SString string("Hey");
 
         REQUIRE(string.append(4, 'y') == "Heyyyyy");
     }
@@ -657,7 +510,7 @@ TEST_CASE("Appending to the endf of a string", "[String], [modifiers], [append]"
     {
         std::vector<char> letters {'A', 'B', 'C', 'D' };
 
-        String string;
+        SString string;
 
         string.append(letters.begin(), letters.end());
 
@@ -665,80 +518,81 @@ TEST_CASE("Appending to the endf of a string", "[String], [modifiers], [append]"
     }
     SECTION("Appending with an initializer list")
     {
-        String string;
+        SString string;
 
         REQUIRE(string.append({ 'A', 'B', 'C', 'D' }) == "ABCD");
     }
     SECTION("Appending a substring")
     {
-        String string;
+        SString string;
         const char* str = "Hello World";
 
         REQUIRE(string.append(str, 5) == "Hello");
     }
     SECTION("Appending a substring larger than the origin")
     {
-        String string;
+        SString string;
         const char* str = "Hello World";
 
         REQUIRE(string.append(str, 500) == str);
     }
     SECTION("Appending a character")
     {
-        String string;
+        SString string;
 
         REQUIRE(string.append('A') == "A");
     }
 }
 
-TEST_CASE("splitting string into a list", "[String], [python], [split]")
+TEST_CASE("splitting string into a list", "[SString], [python], [split]")
 {
     SECTION("A space delimited string")
     {
-        String string("one two three");
-        String::list words { String("one"), String("two"), String("three") };
+        SString string("one two three");
+        SString::list words { SString("one"), SString("two"), SString("three") };
 
         REQUIRE(string.split() == words);
     }
     SECTION("A comma delimited string")
     {
-        String string ("one, two, three");
-        String::list words { String("one"), String("two"), String("three") };
+        SString string ("one, two, three");
+        SString::list words { SString("one"), SString("two"), SString("three") };
 
         REQUIRE(string.split(',') == words);
     }
     SECTION("Too many commas")
     {
-        String string("one, two, three,");
-        String::list words { String("one"), String("two"), String("three"), String() };
+        SString string("one, two, three,");
+        SString::list words { SString("one"), SString("two"), SString("three"), SString() };
 
         REQUIRE(string.split(',') == words);
     }
 }
 
-TEST_CASE("stripping trailing characters off string", "[String], [python], [strip]")
+TEST_CASE("stripping trailing characters off string", "[SString], [python], [strip]")
 {
     SECTION("strip trailing whitespace")
     {
-        String string("  stuff  ");
+        SString string("  stuff  ");
         
         REQUIRE(string.strip() == "stuff");
     }
     SECTION("Strip trailing characters")
     {
-        String string("---  stuff  -");
+        SString string("---  stuff  -");
 
         REQUIRE(string.strip('-') == "  stuff  ");
     }
 }
+*/
 
-TEST_CASE("Using the copy-assignment operator" , "[String], [operator], [copy]")
+TEST_CASE("Using the copy-assignment operator" , "[SString], [operator], [copy]")
 {
     SECTION("A populated string")
     {
-        String string("Hello!");
+        SString string("Hello!");
 
-        String str("junk");
+        SString str("junk");
 
         str = string;
 
@@ -746,13 +600,54 @@ TEST_CASE("Using the copy-assignment operator" , "[String], [operator], [copy]")
     }
     SECTION("An empty string")
     {
-        String string;
+        SString string;
 
-        String str("Junk");
+        SString str("Junk");
 
         str = string;
 
         REQUIRE(str == string);
     }
+    SECTION("Reassign to a c-string")
+    {
+        SString str("junk");
 
+        str = "Hello World";
+
+        REQUIRE(str == "Hello World");
+    }
 }
+
+TEST_CASE("String concatenation", "[SString], [operator], [concatenation]")
+{
+    SECTION("Concatenate c-strings with SString")
+    {
+        const char* cstring = "World";
+        SString str = "Hello ";
+
+        REQUIRE(str + cstring == "Hello World");
+        REQUIRE(cstring + str == "WorldHello ");
+    }
+    SECTION("Concatenate two SStrings")
+    {
+        SString str1 = "Hello ";
+        SString str2 = "World";
+
+        REQUIRE(str1 + str2 == "Hello World");
+    }
+}
+
+TEST_CASE("String construction with >> operator", "[SString], [operator], [read_input]")
+{
+    SECTION("Using istringstream to simulate input") 
+    {
+        SString str;
+        std::istringstream in;
+
+        in.str("test");
+        in >> str;
+
+        REQUIRE(str == "test");
+    }
+}
+
