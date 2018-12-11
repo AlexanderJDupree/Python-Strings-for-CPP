@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 3.0.0)
 
-project (LinkedListsCPP)
+project (Python_Strings_For_CPP)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0") # debug, no optimisation
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage") # enabling coverage
 
-set(SOURCE_FILES tests/tests_main.cpp tests/string_tests.cpp src/string.cpp)
+set(SOURCE_FILES tests/tests_main.cpp tests/string_tests.cpp src/sstring.cpp)
 include_directories(include tests/third_party src/)
 add_executable(runTests ${SOURCE_FILES})
 

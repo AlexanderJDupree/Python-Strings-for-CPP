@@ -47,6 +47,19 @@ SString::SString(unsigned n, char fill)
     _data[*_size - 1] = '\0';
 }
 
+SString::SString(const_pointer buffer, size_type n) 
+    : reference_manager(n + 1)
+{
+    validate_pointer(buffer);
+
+    for(unsigned i = 0; i < n; ++i)
+    {
+        _data[i] = buffer[i];
+    }
+
+    _data[*_size - 1] = '\0';
+}
+
 SString::SString(const self_type& origin)
     : reference_manager(origin) {}
 

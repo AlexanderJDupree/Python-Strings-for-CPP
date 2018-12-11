@@ -65,7 +65,7 @@ TEST_CASE("Constructing Strings", "[SString], [constructors]")
         REQUIRE(string.length() == 5);
         REQUIRE(string.size() == 6);
     }
-/*    SECTION("Buffer construction")
+    SECTION("Buffer construction")
     {
         char buffer[100];
         for(unsigned i = 0; i < 10; ++i)
@@ -77,8 +77,9 @@ TEST_CASE("Constructing Strings", "[SString], [constructors]")
 
         REQUIRE(string == "AAAAAAAAAA");
         REQUIRE(string.length() == 10);
-        REQUIRE(string.capacity() == 11);
+        REQUIRE(string.size() == 11);
     }
+    /*
     SECTION("Range based construction")
     {
         std::vector<char> letters { 'a', 'b', 'c', 'd' };

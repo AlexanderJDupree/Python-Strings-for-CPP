@@ -144,6 +144,9 @@ class SString : public reference_manager<char>
     // Fill constructor
     SString(unsigned n, char fill);
 
+    // Buffer construction
+    SString(const_pointer buffer, size_type n);
+
     // Copy Constructor increments reference count
     SString(const self_type& origin);
 
