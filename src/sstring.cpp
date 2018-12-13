@@ -1,6 +1,16 @@
 /*
-TODO File comments
+File: sstring.cpp
+
+Copyright (c) 2018 Alexander DuPree
+
+This software is released as open source through the MIT License
+
+Authors: Alexander DuPree
+
+https://github.com/AlexanderJDupree/Python-Strings-for-CPP
+
 */
+
 
 #include "sstring.h"
 
