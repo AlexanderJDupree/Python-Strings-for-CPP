@@ -169,6 +169,13 @@ TEST_CASE("Substring and truncation", "[SString], [operations], [substring], [tr
             REQUIRE(err.what() == SString("Error, substring bounds do not exist"));
         }
     }
+    SECTION("Truncating a string to a specific width")
+    {
+        SString str("Hello");
+
+        REQUIRE(str.truncate(3) == "Hel");
+        REQUIRE(str.truncate(8) == "Hello    ");
+    }
 }
 
 TEST_CASE("Relational Operators", "[SString], [relational], [operators], [overloads]")
@@ -234,12 +241,14 @@ TEST_CASE("Comparison operators with strings", "[SString], [comparison], [operat
     SECTION("Freestanding comparisons")
     {
         SString str1("aaa");
-        SString str2("bbb");
+        SString str2("bbbb");
         const char* cstring("ccc");
 
         REQUIRE(cstring > str1);
         REQUIRE_FALSE(str1 > cstring);
+        REQUIRE_FALSE(cstring < str1);
         REQUIRE(str2 > str1);
+        REQUIRE_FALSE(str2 < str1);
     }
 }
 

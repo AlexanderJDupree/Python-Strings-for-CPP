@@ -323,7 +323,7 @@ bool operator< (const SString& lhs, const char* rhs)
 }
 bool operator< (const char* lhs, const SString& rhs)
 {
-    return (rhs < lhs);
+    return (rhs > lhs);
 }
 bool operator< (const SString& lhs, const SString& rhs)
 {
