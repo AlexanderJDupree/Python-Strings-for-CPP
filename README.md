@@ -22,6 +22,10 @@ As someone who learned Python before C++, one of my biggest complaints was how C
 
 It is my hope, that in the coming weeks I will be able to generate a single-header include that will perform similarly to std::string, whilst containing the functionality and methods that Python strings possess.
 
+01.12.2019
+
+My university studies have really ate up a lot of my time and thus, I have not been able to flesh out or work on this project as much as I would like. My latest commit, over a month ago, did refactor the entire project into reference-counted, immutable strings which is more in the fashion of python strings. It will be my focus over the next coming weeks to set up a roadmap and issue tracker such that I will be able to pickup and work on this project at my leisure and open it up to would-be contributors. 
+
 ## Getting Started
 ## Usage
 ## Execute unit tests
