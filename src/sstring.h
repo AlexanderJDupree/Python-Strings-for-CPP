@@ -171,6 +171,10 @@ class SString : public reference_manager<char>
     // Returns a substring of the string from (0, width)
     self_type truncate(unsigned width = 8) const;
 
+    /****** PYTHONIC METHODS ******/
+
+    bool is_upper() const;
+
     /****** ITERATORS ******/
 
     // returns a random-access iterator to the beginning of the string
@@ -200,7 +204,7 @@ class SString : public reference_manager<char>
 
     /****** ACCESS OPERATORS ******/
 
-    char operator [] (unsigned index) const;
+    char operator [] (int index) const;
 
     /****** COMPARISON OPERATORS ******/
 

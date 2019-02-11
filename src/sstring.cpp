@@ -25,14 +25,7 @@ SString::SString()
 SString::SString(const_pointer str) 
     : reference_manager(len(str) + 1)
 {
-    if (!catch_null_exception(str))
-    {
-        copy(str);
-    }
-    else
-    {
-        _data[0] = '\0';
-    }
+    copy(str);
 }
 
 SString::SString(pointer begin, pointer end)
@@ -93,12 +86,13 @@ SString::size_type SString::len(const_pointer str)
 
 void SString::copy(const_pointer source)
 {
-    validate_pointer(source);
-
-    size_type index = 0;
-    for(; index < length() && source[index] != '\0' ; ++index)
+    if(source)
     {
-        _data[index] = source[index];
+        size_type index = 0;
+        for(;index < length() && source[index] != '\0' ; ++index)
+        {
+            _data[index] = source[index];
+        }
     }
 
     // Ensures the last character is null-terminated. _length is not out of 
@@ -110,7 +104,6 @@ void SString::copy(const_pointer source)
 
 SString::size_type SString::length() const
 {
-    // TODO, this assumes the string was not a string of null characters
     return *_size - 1;
 }
 
@@ -156,6 +149,20 @@ SString SString::truncate(unsigned width) const
     }
     
     return substring(0, width - 1);
+}
+
+/****** PYTHONIC METHODS ******/
+
+bool SString::is_upper() const 
+{
+    for(unsigned i = 0; i < length(); ++i)
+    {
+        if(std::isalpha(_data[i]) && std::islower(_data[i])) 
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 /****** ITERATORS ******/
@@ -277,11 +284,16 @@ std::istream& operator >> (std::istream& is, SString& str)
 
 /****** ACCESS OEPRATORS ******/
 
-char SString::operator [] (unsigned index) const
+char SString::operator [] (int index) const
 {
-    if (index >= length())
+    int len = length();
+    if (index >= len || index < len * -1)
     {
         throw bad_index(index);
+    }
+    if(index < 0) 
+    {
+        index += len;
     }
 
     return *(_data + index);

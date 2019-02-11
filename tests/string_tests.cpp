@@ -278,28 +278,25 @@ TEST_CASE("Element access with [] operator", "[SString], [operator]")
             REQUIRE(err.what() == SString("Provided Index is out of bounds"));
         }
     }
-    /*SECTION("Accessing elements with reverse index")
+    SECTION("Accessing elements with reverse index")
     {
         const char* test = "!olleH";
         const char* reverse = "Hello!";
 
         SString string(test);
 
-        unsigned int n = 0;
-        for (int i = -1; i >= static_cast<int>(string.length() * -1); --i)
+        unsigned n = 0;
+        for (int i = -1; i >= (int)string.length() * -1; --i)
         {
-            REQUIRE(string[i] == reverse[n]);
-            ++n;
+            REQUIRE(string[i] == reverse[n++]);
         }
     }
     SECTION("Accessing out of bounds element with reverse index")
     {
         SString string("Hello!");
 
-        REQUIRE_THROWS_AS(string[-100], out_of_range);
+        REQUIRE_THROWS_AS(string[-100], bad_index);
     }
-    */
-    
 }
 
 TEST_CASE("Stream operator overlaods", "[SString], [operators]")
@@ -349,33 +346,33 @@ TEST_CASE("Iterators for element access and string traversal", "[SString], [iter
     }
 }
 
-/*
-TEST_CASE("isupper() to determine string state", "[SString], [bool], [python]")
+TEST_CASE("is_upper() to determine string state", "[SString], [bool], [python]")
 {
     SECTION("A uppercased string")
     {
         SString string("HELLO");
 
-        REQUIRE(string.isupper());
+        REQUIRE(string.is_upper());
     }
     SECTION("A lowercased string")
     {
         SString string("hello");
 
-        REQUIRE(!(string.isupper()));
+        REQUIRE_FALSE(string.is_upper());
     }
     SECTION("A mixed case string")
     {
         SString string("HELlO");
-        REQUIRE(!(string.isupper()));
+        REQUIRE(!(string.is_upper()));
     }
     SECTION("A string with symbols and one uppercased character")
     {
         SString string("!@#$%^T");
 
-        REQUIRE(string.isupper());
+        REQUIRE(string.is_upper());
     }
 }
+/*
 TEST_CASE("islower() to determine string state", "[SString], [bool], [python]")
 {
     SECTION("A uppercased string")
@@ -425,13 +422,13 @@ TEST_CASE("upper() to change casing of string", "[SString], [python], [upper]")
     {
         SString string("hello");
 
-        REQUIRE(string.upper().isupper());
+        REQUIRE(string.upper().is_upper());
     }
     SECTION("A mixed cased string")
     {
         SString string("hE!!o");
 
-        REQUIRE(string.upper().isupper());
+        REQUIRE(string.upper().is_upper());
     }
 }
 
@@ -469,7 +466,7 @@ TEST_CASE("swapcase() to change casing of a string", "[SString], [python], [swap
     {
         SString string("hello");
 
-        REQUIRE(string.swapcase().isupper());
+        REQUIRE(string.swapcase().is_upper());
     }
     SECTION("A mixed cased string")
     {
