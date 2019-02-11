@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+tests/debug/runTests
 
 #Swap Files
 *.swp
