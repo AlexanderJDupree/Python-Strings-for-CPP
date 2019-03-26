@@ -175,6 +175,9 @@ class SString : public reference_manager<char>
 
     bool is_upper() const;
 
+    //  Strip the SString in begining and end
+    self_type& strip(char strip_c = '\n');
+
     /****** ITERATORS ******/
 
     // returns a random-access iterator to the beginning of the string

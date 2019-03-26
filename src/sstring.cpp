@@ -165,6 +165,31 @@ bool SString::is_upper() const
     return true;
 }
 
+SString& SString::strip(char strip_c){
+    // null terminator cannot be used as strip seed
+    if(strip_c == '\0')
+        throw std::invalid_argument("null terminator cannot be used as strip seed!");
+	
+	// double pointer
+    const_pointer it_begin = begin();
+    const_pointer it_end = end();
+    
+    while(*it_begin == strip_c)
+        it_begin++;
+    while(*it_end == strip_c || *it_end == '\0')
+        it_end--;
+    
+    if (it_end < it_begin)
+        *this = SString();
+    else{
+        SString result((pointer)it_begin, (pointer)it_end + 1);
+        *this = result;
+    }
+
+    return *this;
+
+}
+
 /****** ITERATORS ******/
 
 SString::const_iterator SString::begin() const

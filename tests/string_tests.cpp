@@ -372,6 +372,34 @@ TEST_CASE("is_upper() to determine string state", "[SString], [bool], [python]")
         REQUIRE(string.is_upper());
     }
 }
+TEST_CASE("strip() to strip certain char in the begining and end of SString")
+{
+	SECTION("full of strip seed")
+	{
+		SString string("\n\n\n\n");
+		REQUIRE(string.strip('\n') == "\0");
+	}
+	SECTION("only at left side")
+	{
+		SString string("  Hello");
+		REQUIRE(string.strip(' ') == "Hello");
+	}
+	SECTION("only at the end")
+	{
+		SString string("Hello   ");
+		REQUIRE(string.strip(' ') == "Hello");
+	}
+	SECTION("at both sides")
+	{
+		SString string("  H  ");
+		REQUIRE(string.strip(' ') == "H");
+	}
+	SECTION("null terminator used as strip seed")
+	{
+		SString string("hello");
+		REQUIRE_THROWS_WITH(string.strip('\0'), "null terminator cannot be used as strip seed!");
+	}
+}
 /*
 TEST_CASE("islower() to determine string state", "[SString], [bool], [python]")
 {
