@@ -178,6 +178,12 @@ class SString : public reference_manager<char>
     //  Strip the SString in begining and end
     self_type& strip(char strip_c = '\n');
 
+    // Returns true if the string is an integer
+    // or a binary number with prefix 0b,
+    // or a hexadecimal number with prefix 0x
+    // or a octal number with prefic 0o
+    bool isnumeric(void) const;
+
     /****** ITERATORS ******/
 
     // returns a random-access iterator to the beginning of the string
@@ -250,6 +256,12 @@ class SString : public reference_manager<char>
     // copies each character from source including null character. Stops 
     // copying if the buffer is full
     void copy(const_pointer source);
+
+    // helper functions for the isnumeric() function
+    bool is_hex_num(void) const;
+    bool is_bin_num(void) const;
+    bool is_dec_num(void) const;
+    bool is_oct_num(void) const;
 };
 
 struct invalid_substring : public std::exception
