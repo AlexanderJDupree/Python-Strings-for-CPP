@@ -190,6 +190,70 @@ SString& SString::strip(char strip_c){
 
 }
 
+bool SString::isnumeric(void) const {
+    return (is_dec_num() || is_bin_num() || is_hex_num() || is_oct_num());
+}
+
+bool SString::is_bin_num(void) const {
+
+    /* checking for the prefix 0b and if passed, checking for
+     * characters to be either '0' or '1' */
+    if ((size() > 2) && (_data[0] == '0') && (_data[1] == 'b')) {
+        for (unsigned int i = 2; i < size() - 1; ++i) {
+            if ((_data[i] != '0') && (_data[i] != '1'))
+                return false;
+        }
+        return true;
+    }
+
+    return false;
+}
+
+bool SString::is_oct_num(void) const {
+
+    /* checking for the prefix 0o and if passed, checking for
+     * character to be in between '0' and '7' for octal based numbers */
+    if ((size() > 2) && (_data[0] == '0') && (_data[1] == 'o')) {
+        for (unsigned int i = 2; i < size() - 1; ++i) {
+            if (!(std::isdigit(_data[i]) && (_data[i] >= 48)  && (_data[i] <= 55)))
+                return false;
+        }
+        return true;
+    }
+
+    return false;
+}
+
+bool SString::is_dec_num(void) const {
+
+    /* Checking the characters to be digits in case of decimal number,
+     */
+    for (unsigned int i = 0; i < size() - 1; ++i) {
+        if (!(std::isdigit(_data[i]))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool SString::is_hex_num(void) const {
+
+    /* checking for prefic 0x and if passed, checking the hexadecimal digits
+     * '0' to '9', 'A', 'B', 'C', 'D', 'E', 'F' both uppercase and lower case
+     * based on ASCII values */
+    if ((size() > 2) && (_data[0] == '0') && (_data[1] == 'x')) {
+        for (unsigned int i = 2; i < size() - 1; ++i) {
+            if (!((std::isdigit(_data[i])) || (_data[i] >= 65  && _data[i] <= 70)
+                    || (_data[i] >= 97 && _data[i] <= 102)))
+                return false;
+        }
+        return true;
+    }
+
+    return false;
+}
+
 /****** ITERATORS ******/
 
 SString::const_iterator SString::begin() const

@@ -685,3 +685,30 @@ TEST_CASE("String construction with >> operator", "[SString], [operator], [read_
     }
 }
 
+TEST_CASE("Testing whether the string is numeric", "[SString], [python], [isnumeric]") {
+    SECTION("Integer number") {
+        SString str("1234");
+
+        REQUIRE(str.isnumeric());
+    }
+    SECTION("Binary number") {
+        SString str("0b01010");
+
+        REQUIRE(str.isnumeric());
+    }
+    SECTION("Octal number") {
+        SString str("0o1276");
+
+        REQUIRE(str.isnumeric());
+    }
+    SECTION("Hexadecimal number") {
+        SString str("0xaef");
+
+        REQUIRE(str.isnumeric());
+    }
+    SECTION("Not a number") {
+        SString str("ab123");
+
+        REQUIRE(!(str.isnumeric()));
+    }
+}
